@@ -30,6 +30,7 @@ def get_centers(multi_hand_landmarks, frame):
                 max_distance = distance
 
         # Append the center coordinates and the radius
-        hand_info.append(Hand(center_x, center_y, int(max_distance), (255, 0, 0) if idx == 0 else (0, 0, 255)))
+        hand_info.append(Hand(center_x, center_y, 30, (255, 0, 0) if idx == 0 else (0, 0, 255)))
+        # hand_info.append(Hand(center_x, center_y, int(max_distance), (255, 0, 0) if idx == 0 else (0, 0, 255)))
 
     return hand_info

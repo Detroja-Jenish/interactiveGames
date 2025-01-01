@@ -16,7 +16,7 @@ class PyGameRender:
     font = pygame.font.Font(None, 74)
     registered_events = {
         "quit": Event(pygame.QUIT, lambda e: setattr(GameState, 'running', False)),
-        "quit_keyboard" : Event(pygame.KEYDOWN, lambda e: setattr(GameState, 'running', False))
+        # "quit_keyboard" : Event(pygame.KEYDOWN, lambda e: setattr(GameState, 'running', False))
     }
     # cropping_rect = pygame.Rect(100, 100, 200, 150)
     cropping_rect = pygame.Rect(332, 338, 109, 66)
@@ -30,9 +30,9 @@ class PyGameRender:
     @classmethod
     def renderCropScreen(cls):
         # Fill the screen with a background color/frame (if necessary)
-        Camera.readFrame()
-        frame_surface = pygame.surfarray.make_surface(np.transpose(Camera.frame, (1, 0, 2)))
-        GameGlobals.screen.blit(frame_surface, (0, 0))
+        # Camera.readFrame()
+        # frame_surface = pygame.surfarray.make_surface(np.transpose(Camera.frame, (1, 0, 2)))
+        # GameGlobals.screen.blit(frame_surface, (0, 0))
 
         # Draw the cropping rectangle
         pygame.draw.rect(GameGlobals.screen, (255, 0, 0), cls.cropping_rect, 2)  # Draw a red rectangle with a border thickness of 2

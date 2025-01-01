@@ -4,7 +4,7 @@ from gameState import GameState
 from pygameRender import PyGameRender
 import numpy as np
 from gameGlobals import GameGlobals
-
+from background import drawBackground
 class Game:
     @classmethod
     def updateScore(cls):
@@ -26,8 +26,8 @@ class Game:
 
         # frame_surface = pygame.surfarray.make_surface(np.transpose(Camera.frame, (1, 0, 2)))
         # GameGlobals.screen.blit(frame_surface, (0, 0))
-        GameGlobals.screen.fill((200, 200, 200))
-
+        # GameGlobals.screen.fill((200, 200, 200))
+        drawBackground(GameGlobals.screen)
         if results.multi_hand_landmarks:
             PyGameRender.renderHands(results.multi_hand_landmarks)
 
@@ -66,11 +66,17 @@ class Game:
         # Flip display to render changes
         pygame.display.flip()
         # Add event for the start button
+        # PyGameRender.addEvent(
+        #     "start_btn",
+        #     pygame.MOUSEBUTTONDOWN, 
+        #     lambda e: setattr(GameState, 'state', 'play'),  # Correct callback here
+        #     lambda e: start_button.collidepoint(e.pos),  # Condition: Check if button is clicked
+        # )
         PyGameRender.addEvent(
             "start_btn",
-            pygame.MOUSEBUTTONDOWN, 
+            pygame.KEYDOWN, 
             lambda e: setattr(GameState, 'state', 'play'),  # Correct callback here
-            lambda e: start_button.collidepoint(e.pos),  # Condition: Check if button is clicked
+            lambda e: e.key == pygame.K_s,  # Condition: Check if button is clicked
         )
 
         PyGameRender.addEvent(
