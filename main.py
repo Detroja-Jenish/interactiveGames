@@ -1,8 +1,9 @@
 from Calliberation import Calliberation
-from ClimbBall import ClimbBall
+from Game.AstroidShooter import AstroidShooter
+from Game.ClimbBall import ClimbBall
 from gameGlobals import GameGlobals
 
-game = ClimbBall()
+game = AstroidShooter()
 # def main():
 calliberation = Calliberation()
 while not GameGlobals.quit:

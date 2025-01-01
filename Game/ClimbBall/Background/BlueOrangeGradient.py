@@ -1,6 +1,6 @@
 import math
 import random
-from ClimbBall.Background.IBackground import IBackground
+from Game.ClimbBall.Background.IBackground import IBackground
 import pygame
 from gameGlobals import GameGlobals
 

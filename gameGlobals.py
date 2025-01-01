@@ -1,3 +1,4 @@
+
 import pygame
 import os
 class GameGlobals:

@@ -1,9 +1,10 @@
+
 from Camera import Camera
-from ClimbBall.Background.BlueOrangeGradient import BlueOrangeGradient
-from ClimbBall.Background.Space import Space
 from EventHandler import Event, EventHandler
+from Game.ClimbBall.Background.BlueOrangeGradient import BlueOrangeGradient
+from Game.ClimbBall.Background.Space import Space
+from Game.ClimbBall.gameState import GameState
 from HandDetection import HandDetection
-from ClimbBall.gameState import GameState
 from gameGlobals import GameGlobals
 import pygame
 

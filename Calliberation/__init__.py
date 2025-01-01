@@ -1,5 +1,6 @@
 from Camera import Camera
 from EventHandler import Event, EventHandler
+from Game.AstroidShooter import AstroidShooter
 from gameGlobals import GameGlobals
 import numpy as np
 import json

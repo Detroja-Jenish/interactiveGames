@@ -1,11 +1,13 @@
 import mediapipe as mp
 import math
 class Hand:
-    def __init__(self, center_x, center_y, radius, color):
+    def __init__(self, center_x, center_y, radius, color,point1,point2):
         self.center_x = center_x
         self.center_y = center_y
         self.radius = radius // 2
         self.color = color
+        self.point1 = point1
+        self.point2 = point2
 
 class HandDetection:
     mp_hands = mp.solutions.hands
@@ -42,7 +44,7 @@ class HandDetection:
                     max_distance = distance
 
             # Append the center coordinates and the radius
-            hand_info.append(Hand(center_x, center_y, 30, (255, 0, 0) if idx == 0 else (0, 0, 255)))
+            hand_info.append(Hand(center_x, center_y, 30, (255, 0, 0) if idx == 0 else (0, 0, 255), hand_landmarks.landmark[0], hand_landmarks.landmark[12]))
             # hand_info.append(Hand(center_x, center_y, int(max_distance), (255, 0, 0) if idx == 0 else (0, 0, 255)))
 
         return hand_info
