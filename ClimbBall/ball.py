@@ -1,6 +1,8 @@
 import math
 import numpy as np
 from gameGlobals import GameGlobals
+import pygame
+
 class Ball:
     def __init__(self, x, y, radius, color, speed_x, speed_y):
         super().__init__()
@@ -11,6 +13,9 @@ class Ball:
         self.speed_x = speed_x
         self.speed_y = speed_y
         self.accelration = 1
+
+    def draw(self):
+        pygame.draw.circle(GameGlobals.screen, self.color, (self.x, self.y), self.radius)
 
     def move(self):
         self.x += self.speed_x*self.accelration

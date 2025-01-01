@@ -8,6 +8,7 @@ from utils.getPersistentPath import getPersistentPath
 class Camera:
     cam = cv2.VideoCapture(0)
     # cam = cv2.VideoCapture("http://192.168.227.191:4747/video")
+    # cam = cv2.VideoCapture("http://192.168.144.230:4747/video")
     ret, frame = cam.read()
     height, width = GameGlobals.screen_height,GameGlobals.screen_width 
     x,y,w,h = 0,0,0,0
