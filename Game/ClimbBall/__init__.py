@@ -34,9 +34,9 @@ class ClimbBall:
         # GameGlobals.screen.fill((200, 200, 200))
         # drawBackground(GameGlobals.screen)
 
-        frame_surface = pygame.surfarray.make_surface(np.transpose(Camera.frame, (1, 0, 2)))
-        GameGlobals.screen.blit(frame_surface, (0, 0))
-        # self.background.draw()
+        # frame_surface = pygame.surfarray.make_surface(np.transpose(Camera.frame, (1, 0, 2)))
+        # GameGlobals.screen.blit(frame_surface, (0, 0))
+        self.background.draw()
 
         if results:
             for index, hand in enumerate(results):

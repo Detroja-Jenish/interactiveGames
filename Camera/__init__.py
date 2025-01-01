@@ -19,7 +19,7 @@ class Camera:
     @classmethod
     def readFrame(cls):
         cls.ret, cls.frame = Camera.cam.read()
-        cls.frame = cv2.flip(cls.frame, 1)
+        # cls.frame = cv2.flip(cls.frame, 1)
         cls.frame = cv2.resize(cls.frame, (cls.width, cls.height))
         cls.video_writer.write(cls.frame)
         if GameGlobals.isCameraCallibered:

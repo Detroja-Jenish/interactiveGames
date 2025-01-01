@@ -67,17 +67,17 @@ class PoseEstimater:
             pass
 
         try:
-            hand1_cordinates = cls.extendLine(leftElbow, leftWrist,50)
+            hand1_cordinates = cls.extendLine(leftElbow, leftWrist,100)
             if hand1_cordinates["x"] != 0 and hand1_cordinates["y"] != 0:
                 print(f"left ->>>> elbow :- {leftElbow}   ,   wrist = {leftWrist},    extended = {hand1_cordinates} ")
-                hands.append(Hand(hand1_cordinates["x"],hand1_cordinates["y"], 70, (255,0,0), leftWrist, (hand1_cordinates["x"],hand1_cordinates["y"])))
+                hands.append(Hand(hand1_cordinates["x"],hand1_cordinates["y"], 140, (255,0,0), leftWrist, (hand1_cordinates["x"],hand1_cordinates["y"])))
         except Exception:
             pass
         try:
-            hand2_cordinates = cls.extendLine(rightElbow, rightWrist,50)
+            hand2_cordinates = cls.extendLine(rightElbow, rightWrist,100)
             if hand2_cordinates["x"] != 0 and hand2_cordinates["y"] != 0:
                 print(f"right ->>>> elbow :- {rightElbow}   ,   wrist = {rightWrist},    extended = {hand2_cordinates} ")
-                hands.append(Hand(hand2_cordinates["x"],hand2_cordinates["y"], 70, (255,0,0), leftWrist, (hand2_cordinates["x"],hand2_cordinates["y"])))
+                hands.append(Hand(hand2_cordinates["x"],hand2_cordinates["y"], 140, (255,0,0), leftWrist, (hand2_cordinates["x"],hand2_cordinates["y"])))
         except Exception:
             pass
 
@@ -85,7 +85,7 @@ class PoseEstimater:
             leg1_cordinates = cls.extendLine(leftKnee, leftAnkle,50)
             if leg1_cordinates["x"] != 0 and leg1_cordinates["y"] != 0:
                 print(f"left ->>>> knee :- {leftKnee}   ,   ankle = {leftAnkle},    extended = {leg1_cordinates} ")
-                hands.append(Hand(leg1_cordinates["x"],leg1_cordinates["y"], 70, (255,0,0), leftWrist, (leg1_cordinates["x"],leg1_cordinates["y"])))
+                hands.append(Hand(leg1_cordinates["x"],leg1_cordinates["y"], 140, (255,0,0), leftWrist, (leg1_cordinates["x"],leg1_cordinates["y"])))
         except Exception:
             pass
 
@@ -93,13 +93,13 @@ class PoseEstimater:
             leg2_cordinates = cls.extendLine(rightKnee, rightAnkle,50)
             if leg2_cordinates["x"] != 0 and leg2_cordinates["y"] != 0:
                 print(f"left ->>>> knee :- {rightKnee}   ,   ankle = {rightAnkle},    extended = {leg2_cordinates} ")
-                hands.append(Hand(leg2_cordinates["x"],leg2_cordinates["y"], 70, (255,0,0), leftWrist, (leg2_cordinates["x"],leg2_cordinates["y"])))
+                hands.append(Hand(leg2_cordinates["x"],leg2_cordinates["y"], 140, (255,0,0), leftWrist, (leg2_cordinates["x"],leg2_cordinates["y"])))
         except Exception:
             pass
         try:
             if nose[0] != 0 and nose[1] != 0:
                 print(f" face ->>>> nose :- {nose} ")
-                hands.append(Hand(int(nose[0]) + 100,int(nose[1]), 70, (255,0,0), leftWrist, (nose[0],nose[1])))
+                # hands.append(Hand(int(nose[0]) + 100,int(nose[1]), 70, (255,0,0), leftWrist, (nose[0],nose[1])))
         except Exception as e:
             pass
 
