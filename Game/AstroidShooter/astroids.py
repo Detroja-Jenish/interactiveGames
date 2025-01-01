@@ -4,6 +4,13 @@ import random
 import pygame
 import time
 from threading import Thread
+images =[ pygame.image.load('/Users/jenishdetroja/Desktop/dev/python_project/OpenCv_projects/ping-pong-cv/v11/assets/images/Meteors/Meteor_01.png'),
+        pygame.image.load('/Users/jenishdetroja/Desktop/dev/python_project/OpenCv_projects/ping-pong-cv/v11/assets/images/Meteors/Meteor_03.png'),
+        pygame.image.load('/Users/jenishdetroja/Desktop/dev/python_project/OpenCv_projects/ping-pong-cv/v11/assets/images/Meteors/Meteor_05.png'),
+        pygame.image.load('/Users/jenishdetroja/Desktop/dev/python_project/OpenCv_projects/ping-pong-cv/v11/assets/images/Meteors/Meteor_07.png'),
+        pygame.image.load('/Users/jenishdetroja/Desktop/dev/python_project/OpenCv_projects/ping-pong-cv/v11/assets/images/Meteors/Meteor_10.png')
+        ]
+explosionSound = pygame.mixer.Sound('/Users/jenishdetroja/Desktop/dev/python_project/OpenCv_projects/ping-pong-cv/v11/assets/sounds/explosion.wav')
 class __Astroid__:
     def __init__(self, x, y, radius, color, speed_x, speed_y):
         self.x = x
@@ -13,6 +20,7 @@ class __Astroid__:
         self.speed_x = speed_x
         self.speed_y = speed_y
         self.accelration = 1
+        self.imageID = random.randint(0,4)
     
     def move(self):
         self.x -= self.speed_x*self.accelration
@@ -20,7 +28,12 @@ class __Astroid__:
         return self.x + self.radius <= 0
     
     def draw(self):
+        resized_image = pygame.transform.scale(images[self.imageID], (self.radius*2, self.radius*2))
+        image_rect = resized_image.get_rect()
+        image_rect.center = (self.x,self.y)
         pygame.draw.circle(GameGlobals.screen, self.color, (self.x, self.y), self.radius) 
+        pygame.draw.circle(GameGlobals.screen, (0,0,0,0), (self.x, self.y), self.radius) 
+        GameGlobals.screen.blit(resized_image, image_rect)
 
     def isCollideBullet(self,bullet):
         distance = math.sqrt((self.x - bullet.x)**2 + (self.y - bullet.y)**2)
@@ -44,12 +57,13 @@ class AstroidHandler:
             __Astroid__(
                 GameGlobals.screen_width, 
                 random.randint(100, GameGlobals.screen_height - 100),
-                random.randint(20,100),(150,75,0),
+                random.randint(20,50),
+                (150,75,0),
                 random.randint(1,4),
                 0
             )
             for _ in range(0,random.randint(0,4))])
-            time.sleep(random.randint(2,7))
+            time.sleep(random.randint(3,8))
 
     def moveAstroids(self):
         for astroid in self.astroids:
@@ -58,10 +72,15 @@ class AstroidHandler:
                 self.astroids.remove(astroid)
 
     def detectCollisonWithAstroids(self,bullet):
+        flag = False
         for astroid in self.astroids:
             if astroid.isCollideBullet(bullet):
                 self.astroids.remove(astroid)
-                return True
+                flag = True
+                break
+        if flag:
+            explosionSound.play()
+        return flag
     
     def drawAstroids(self):
         for astroid in self.astroids:

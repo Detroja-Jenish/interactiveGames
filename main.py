@@ -2,7 +2,7 @@ from Calliberation import Calliberation
 from Game.AstroidShooter import AstroidShooter
 from Game.ClimbBall import ClimbBall
 from gameGlobals import GameGlobals
-
+import pygame
 game = AstroidShooter()
 # def main():
 calliberation = Calliberation()
@@ -13,3 +13,5 @@ while not GameGlobals.quit:
         calliberation.doCaliber()
 
 # main()
+pygame.mixer.music.stop()
+pygame.quit()

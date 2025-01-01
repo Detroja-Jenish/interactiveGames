@@ -27,12 +27,11 @@ class AstroidShooter:
         
         self.astroidHandler.moveAstroids()
         self.shooter.moveBullet()
-        if self.astroidHandler.detectCollisonWithAstroids(self.shooter.bullet) or (not self.shooter.isBulletAlive):
-            if results:
-                dx = (results[0].point2.x - results[0].point1.x)*GameGlobals.screen_width
-                dy = (results[0].point2.y - results[0].point1.y)*GameGlobals.screen_height
-                angle = math.atan2(dy,dx)
-            self.shooter.shoot( angle if results else math.atan2(1,1))
+        if (self.astroidHandler.detectCollisonWithAstroids(self.shooter.bullet) or (not self.shooter.isBulletAlive)) and results:
+            dx = (results[0].point2.x - results[0].point1.x)*GameGlobals.screen_width
+            dy = (results[0].point2.y - results[0].point1.y)*GameGlobals.screen_height
+            angle = math.atan2(dy,dx)
+            self.shooter.shoot( angle )
         self.shooter.draw()
         self.astroidHandler.drawAstroids()
         pygame.display.flip()

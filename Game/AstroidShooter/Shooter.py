@@ -2,6 +2,7 @@ import math
 import random
 from gameGlobals import GameGlobals
 import pygame
+bulletShootSound = pygame.mixer.Sound('/Users/jenishdetroja/Desktop/dev/python_project/OpenCv_projects/ping-pong-cv/v11/assets/sounds/bulletShoot.mp3')
 
 class __Bullet__():
     def __init__(self,x,y,radius,color,speed_x,speed_y):
@@ -12,6 +13,7 @@ class __Bullet__():
         self.speed_x = speed_x
         self.speed_y = speed_y
         self.accelration = 1
+        bulletShootSound.play()
 
     def move(self):
         self.x += self.speed_x*self.accelration

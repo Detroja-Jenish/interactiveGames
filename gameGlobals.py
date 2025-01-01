@@ -4,6 +4,7 @@ import os
 class GameGlobals:
     os.environ["SDL_VIDEO_CENTERED"] = '1'
     pygame.init()
+    pygame.mixer.init()
     font = pygame.font.Font(None, 74)
     info = pygame.display.Info()
     screen_width, screen_height = info.current_w - 10,info.current_h - 10
