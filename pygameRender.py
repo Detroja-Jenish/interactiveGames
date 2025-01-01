@@ -12,13 +12,16 @@ class Event:
 
 class PyGameRender:
     pygame.init()
+    fps_clock = pygame.time.Clock()
     screen = pygame.display.set_mode((Camera.width, Camera.height))
     pygame.display.set_caption("Hand Bounding Circle and Ball")
     font = pygame.font.Font(None, 74)
     registered_events = {
         "quit": Event(pygame.QUIT, lambda e: setattr(GameState, 'running', False))
     }
-    cropping_rect = pygame.Rect(100, 100, 200, 150)  # Initial rectangle
+    # cropping_rect = pygame.Rect(100, 100, 200, 150)
+    cropping_rect = pygame.Rect(332, 338, 109, 66)
+      # Initial rectangle
     resizing = False
     moving = False
     offset_x = 0
@@ -84,9 +87,10 @@ class PyGameRender:
     @classmethod
     def renderHands(cls, multi_hand_landmarks):
         hand_objects = get_centers(multi_hand_landmarks, Camera.frame)
-        for hand in hand_objects:
+        for index, hand in enumerate(hand_objects):
             cls.renderHand(hand)
             GameState.ball.check_collision_with_hand(hand.center_x, hand.center_y, hand.radius)
+            if(index == 1): print(cls.fps_clock.get_fps())
 
     @classmethod
     def renderBall(cls):
@@ -94,7 +98,7 @@ class PyGameRender:
 
     @classmethod
     def renderHand(cls, hand):
-        pygame.draw.circle(cls.screen, hand.color, (hand.center_x, hand.center_y), hand.radius, 2)
+        pygame.draw.circle(cls.screen, hand.color, (hand.center_x, hand.center_y), hand.radius, 0)
 
     @classmethod
     def renderBtn(cls, name, x1, y1, width, height):
@@ -140,4 +144,3 @@ class PyGameRender:
 
                 if event.type == registered_event.type and registered_event.condition(event):
                     registered_event.callback(event)
-                    print(name)

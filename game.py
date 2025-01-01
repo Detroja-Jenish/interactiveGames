@@ -23,8 +23,9 @@ class Game:
 
         results = GameState.handsModel.process(Camera.frame)
 
-        frame_surface = pygame.surfarray.make_surface(np.transpose(Camera.frame, (1, 0, 2)))
-        PyGameRender.screen.blit(frame_surface, (0, 0))
+        # frame_surface = pygame.surfarray.make_surface(np.transpose(Camera.frame, (1, 0, 2)))
+        # PyGameRender.screen.blit(frame_surface, (0, 0))
+        PyGameRender.screen.fill((0, 0, 0))
 
         if results.multi_hand_landmarks:
             PyGameRender.renderHands(results.multi_hand_landmarks)
@@ -37,7 +38,8 @@ class Game:
 
         pygame.display.flip()
         PyGameRender.checkEvents()
-
+        
+        PyGameRender.fps_clock.tick(60)
     @classmethod
     def startScreen(cls):
         # Capture the current frame from the camera
@@ -53,6 +55,7 @@ class Game:
         PyGameRender.addCropEvents()
 
     # Add event handling for the cropping rectangle
+        crop_button = PyGameRender.renderBtn("Crop",PyGameRender.screen.get_width() // 2 - 100, PyGameRender.screen.get_height() // 2 - 120, 200, 50)
         start_button = PyGameRender.renderBtn("start game",PyGameRender.screen.get_width() // 2 - 100, PyGameRender.screen.get_height() // 2 - 50, 200, 50)
         quit_button = PyGameRender.renderBtn("quit game",PyGameRender.screen.get_width() // 2 - 100, PyGameRender.screen.get_height() // 2 + 20, 200, 50)
         
@@ -64,7 +67,7 @@ class Game:
             "start_btn",
             pygame.MOUSEBUTTONDOWN, 
             lambda e: setattr(GameState, 'state', 'play'),  # Correct callback here
-            lambda e: start_button.collidepoint(e.pos)  # Condition: Check if button is clicked
+            lambda e: start_button.collidepoint(e.pos),  # Condition: Check if button is clicked
         )
 
         PyGameRender.addEvent(
@@ -73,6 +76,12 @@ class Game:
             lambda e: setattr(GameState, 'running', False),  # Correct callback here
             lambda e: quit_button.collidepoint(e.pos)  # Condition: Check if button is clicked
         )
-
+        PyGameRender.addEvent(
+            "crop_button",
+            pygame.MOUSEBUTTONDOWN, 
+            lambda e: Camera.setCrop( PyGameRender.cropping_rect.x,PyGameRender.cropping_rect.y ,PyGameRender.cropping_rect.width ,PyGameRender.cropping_rect.height),#
+            # lambda e: setattr(GameState, 'state', 'play'),  # Correct callback here
+            lambda e: start_button.collidepoint(e.pos),  # Condition: Check if button is clicked
+        )
         # Check for all registered events
         PyGameRender.checkEvents()
