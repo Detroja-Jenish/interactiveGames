@@ -1,7 +1,7 @@
 import math
 import numpy as np
 from camera import Camera
-
+from gameGlobals import GameGlobals
 class Ball:
     def __init__(self, x, y, radius, color, speed_x, speed_y):
         super().__init__()
@@ -17,7 +17,7 @@ class Ball:
         self.y += self.speed_y
 
         # Bounce the ball off the top and bottom edges of the screen
-        if self.y - self.radius <= 0 or self.y + self.radius >= Camera.height:
+        if self.y - self.radius <= 0 or self.y + self.radius >= GameGlobals.screen_height:
             self.speed_y *= -1
 
     def check_collision_with_hand(self, hand_x, hand_y, hand_radius):
@@ -48,6 +48,6 @@ class Ball:
         # Check if the ball hits the left or right side of the screen
         if self.x - self.radius <= 0:
             return 'right'  # Right player gets a point
-        elif self.x + self.radius >= Camera.width:
+        elif self.x + self.radius >= GameGlobals.screen_width:
             return 'left'  # Left player gets a point
         return None

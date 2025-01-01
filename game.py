@@ -3,6 +3,7 @@ from camera import Camera
 from gameState import GameState
 from pygameRender import PyGameRender
 import numpy as np
+from gameGlobals import GameGlobals
 
 class Game:
     @classmethod
@@ -10,10 +11,10 @@ class Game:
         score_side = GameState.ball.check_score()
         if score_side == 'left':
             GameState.left_score += 1
-            GameState.ball.x, GameState.ball.y = Camera.width // 2, Camera.height // 2  # Reset ball position
+            GameState.ball.x, GameState.ball.y = GameGlobals.screen_width // 2, GameGlobals.screen_height // 2  # Reset ball position
         elif score_side == 'right':
             GameState.right_score += 1
-            GameState.ball.x, GameState.ball.y = Camera.width // 2, Camera.height // 2  # Reset ball position
+            GameState.ball.x, GameState.ball.y = GameGlobals.screen_width // 2, GameGlobals.screen_height // 2  # Reset ball position
 
     @classmethod
     def play(cls):
@@ -24,8 +25,8 @@ class Game:
         results = GameState.handsModel.process(Camera.frame)
 
         # frame_surface = pygame.surfarray.make_surface(np.transpose(Camera.frame, (1, 0, 2)))
-        # PyGameRender.screen.blit(frame_surface, (0, 0))
-        PyGameRender.screen.fill((0, 0, 0))
+        # GameGlobals.screen.blit(frame_surface, (0, 0))
+        GameGlobals.screen.fill((200, 200, 200))
 
         if results.multi_hand_landmarks:
             PyGameRender.renderHands(results.multi_hand_landmarks)
@@ -49,19 +50,21 @@ class Game:
 
         # Create a surface from the captured frame
         frame_surface = pygame.surfarray.make_surface(np.transpose(Camera.frame, (1, 0, 2)))
-        PyGameRender.screen.blit(frame_surface, (0, 0))  # Set it as backgroun
+        GameGlobals.screen.blit(frame_surface, (0, 0))  # Set it as backgroun
         
         PyGameRender.renderCropScreen()
         PyGameRender.addCropEvents()
 
     # Add event handling for the cropping rectangle
-        crop_button = PyGameRender.renderBtn("Crop",PyGameRender.screen.get_width() // 2 - 100, PyGameRender.screen.get_height() // 2 - 120, 200, 50)
-        start_button = PyGameRender.renderBtn("start game",PyGameRender.screen.get_width() // 2 - 100, PyGameRender.screen.get_height() // 2 - 50, 200, 50)
-        quit_button = PyGameRender.renderBtn("quit game",PyGameRender.screen.get_width() // 2 - 100, PyGameRender.screen.get_height() // 2 + 20, 200, 50)
-        
+        crop_button = PyGameRender.renderBtn("Crop",10, 10, 200, 50)
+        start_button = PyGameRender.renderBtn("start game",10, 80, 200, 50)
+        quit_button = PyGameRender.renderBtn("quit game",10, 150, 200, 50)
+        pygame.draw.circle(GameGlobals.screen, (255,255,255), (0,0), GameState.ball.radius)
+        pygame.draw.circle(GameGlobals.screen, (255,0,255), (0,GameGlobals.screen_height), GameState.ball.radius)
+        pygame.draw.circle(GameGlobals.screen, (255,255,0), (GameGlobals.screen_width,0), GameState.ball.radius)
+        pygame.draw.circle(GameGlobals.screen, (0,255,255), (GameGlobals.screen_width,GameGlobals.screen_height), GameState.ball.radius)
         # Flip display to render changes
         pygame.display.flip()
-
         # Add event for the start button
         PyGameRender.addEvent(
             "start_btn",

@@ -3,7 +3,7 @@ from gameState import GameState
 from camera import Camera
 from utils.getCenteres import get_centers
 import numpy as np
-
+from gameGlobals import GameGlobals
 class Event:
     def __init__(self, type, callback, condition=lambda e: True):
         self.type = type
@@ -11,13 +11,12 @@ class Event:
         self.condition = condition
 
 class PyGameRender:
-    pygame.init()
     fps_clock = pygame.time.Clock()
-    screen = pygame.display.set_mode((Camera.width, Camera.height))
     pygame.display.set_caption("Hand Bounding Circle and Ball")
     font = pygame.font.Font(None, 74)
     registered_events = {
-        "quit": Event(pygame.QUIT, lambda e: setattr(GameState, 'running', False))
+        "quit": Event(pygame.QUIT, lambda e: setattr(GameState, 'running', False)),
+        "quit_keyboard" : Event(pygame.KEYDOWN, lambda e: setattr(GameState, 'running', False))
     }
     # cropping_rect = pygame.Rect(100, 100, 200, 150)
     cropping_rect = pygame.Rect(332, 338, 109, 66)
@@ -33,10 +32,10 @@ class PyGameRender:
         # Fill the screen with a background color/frame (if necessary)
         Camera.readFrame()
         frame_surface = pygame.surfarray.make_surface(np.transpose(Camera.frame, (1, 0, 2)))
-        cls.screen.blit(frame_surface, (0, 0))
+        GameGlobals.screen.blit(frame_surface, (0, 0))
 
         # Draw the cropping rectangle
-        pygame.draw.rect(cls.screen, (255, 0, 0), cls.cropping_rect, 2)  # Draw a red rectangle with a border thickness of 2
+        pygame.draw.rect(GameGlobals.screen, (255, 0, 0), cls.cropping_rect, 2)  # Draw a red rectangle with a border thickness of 2
 
         pygame.display.flip()
 
@@ -81,8 +80,8 @@ class PyGameRender:
     def renderScore(cls):
         left_text = cls.font.render(str(GameState.left_score), True, (0, 0, 0))
         right_text = cls.font.render(str(GameState.right_score), True, (0, 0, 0))
-        cls.screen.blit(left_text, (Camera.width // 4, 10))
-        cls.screen.blit(right_text, (3 * Camera.width // 4, 10))
+        GameGlobals.screen.blit(left_text, (GameGlobals.screen_width // 4, 10))
+        GameGlobals.screen.blit(right_text, (3 * GameGlobals.screen_width // 4, 10))
 
     @classmethod
     def renderHands(cls, multi_hand_landmarks):
@@ -94,11 +93,11 @@ class PyGameRender:
 
     @classmethod
     def renderBall(cls):
-        pygame.draw.circle(cls.screen, GameState.ball.color, (GameState.ball.x, GameState.ball.y), GameState.ball.radius)
+        pygame.draw.circle(GameGlobals.screen, GameState.ball.color, (GameState.ball.x, GameState.ball.y), GameState.ball.radius)
 
     @classmethod
     def renderHand(cls, hand):
-        pygame.draw.circle(cls.screen, hand.color, (hand.center_x, hand.center_y), hand.radius, 0)
+        pygame.draw.circle(GameGlobals.screen, hand.color, (hand.center_x, hand.center_y), hand.radius, 0)
 
     @classmethod
     def renderBtn(cls, name, x1, y1, width, height):
@@ -114,7 +113,7 @@ class PyGameRender:
         mouse_pos = pygame.mouse.get_pos()
 
         # Draw the button (hover effect)
-        pygame.draw.rect(cls.screen, hover_color if btn.collidepoint(mouse_pos) else button_color, btn)
+        pygame.draw.rect(GameGlobals.screen, hover_color if btn.collidepoint(mouse_pos) else button_color, btn)
 
         # Render the text
         text = font.render(name, True, text_color)
@@ -127,7 +126,7 @@ class PyGameRender:
         text_y = y1 + (height - text_rect.height) // 2
 
         # Render the text on the screen at the calculated position
-        cls.screen.blit(text, (text_x, text_y))
+        GameGlobals.screen.blit(text, (text_x, text_y))
 
         return btn
 

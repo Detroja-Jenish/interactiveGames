@@ -1,10 +1,10 @@
 from ball import Ball
 import random 
-from camera import Camera
 import mediapipe as mp
+from gameGlobals import GameGlobals
 
 class GameState:
-    ball = Ball(x=random.randint(50, Camera.width-50), y=random.randint(50, Camera.height-50), radius=15, color=(0, 255, 0), speed_x=5, speed_y=5)
+    ball = Ball(x=random.randint(50, GameGlobals.screen_width-50), y=random.randint(50, GameGlobals.screen_height-50), radius=40, color=(0, 0, 0), speed_x=20, speed_y=20)
     left_score = 0 
     right_score = 0
     running = True
