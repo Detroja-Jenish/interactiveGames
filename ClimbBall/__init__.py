@@ -1,5 +1,6 @@
 from Camera import Camera
-from ClimbBall.background import drawBackground
+# from ClimbBall.background import drawBackground
+from ClimbBall.background2 import SpaceBackGround
 from EventHandler import Event, EventHandler
 from HandDetection import HandDetection
 from ClimbBall.gameState import GameState
@@ -8,10 +9,11 @@ import pygame
 
 class ClimbBall:
     def __init__(self):
+        self.background = SpaceBackGround(GameGlobals.screen_width,GameGlobals.screen_height)
         self.gameState = GameState()
         self.eventHandler = EventHandler()
         self.eventHandler.registerEvent("quit",Event(pygame.QUIT,lambda _ : GameGlobals.doQuit()))
-        self.eventHandler.registerEvent("quit_by_press_q",Event( pygame.KEYDOWN, lambda _ : GameGlobals.doQuit(),lambda e : print("from lambda",e.key == pygame.K_q), condition = lambda e : e.key == pygame.K_q))
+        self.eventHandler.registerEvent("quit_by_press_q",Event( pygame.KEYDOWN, lambda _ : GameGlobals.doQuit(), condition = lambda e : e.key == pygame.K_q))
 
     def play(self):
         Camera.readFrame()
@@ -19,7 +21,8 @@ class ClimbBall:
             raise "error occurred"
         results = HandDetection.detectHand(Camera.frame)
         # GameGlobals.screen.fill((200, 200, 200))
-        drawBackground(GameGlobals.screen)
+        # drawBackground(GameGlobals.screen)
+        self.background.draw(GameGlobals.screen)
         if results:
             for index, hand in enumerate(results):
                 pygame.draw.circle(GameGlobals.screen, hand.color, (hand.center_x, hand.center_y), hand.radius, 0)
@@ -37,4 +40,4 @@ class ClimbBall:
 
         pygame.display.flip()
         self.eventHandler.checkEventOccurnce()
-        print(GameGlobals.clock.get_fps())
+        # print(GameGlobals.clock.get_fps())

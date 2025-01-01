@@ -4,7 +4,7 @@ from gameGlobals import GameGlobals
 
 class GameState:
     def __init__(self):
-        self.ball = Ball(x=random.randint(50, GameGlobals.screen_width-50), y=random.randint(50, GameGlobals.screen_height-50), radius=40, color=(0, 0, 0), speed_x=5, speed_y=5)
+        self.ball = Ball(x=random.randint(50, GameGlobals.screen_width-50), y=random.randint(50, GameGlobals.screen_height-50), radius=40, color=(255, 250, 0), speed_x=5, speed_y=5)
         self.left_score = 0 
         self.right_score = 0
         self.running = True

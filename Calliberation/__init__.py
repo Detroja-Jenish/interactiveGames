@@ -4,18 +4,20 @@ from gameGlobals import GameGlobals
 import numpy as np
 import json
 import pygame
+from utils.getPersistentPath import getPersistentPath
 
 class Calliberation:
     def __init__(self):
         try:
-            with open("config.json","r") as fp:
+            configFilePath = getPersistentPath("config.json")
+            with open(configFilePath,"r") as fp:
                 data = json.load(fp)
-                print(data)
+                #print(data)
                 self.cropping_rect = pygame.Rect(data["calliberationCords"]["x"], data["calliberationCords"]["y"], data["calliberationCords"]["width"], data["calliberationCords"]["height"])
                 
         except:
-            print("exception genrated while creating cropping retangle")
-            self.cropping_rect = pygame.Rect(332, 338, 109, 66)
+            #print("exception genrated while creating cropping retangle")
+            self.cropping_rect = pygame.Rect(0, 0, 109, 66)
         self.resizing = False
         self.moving = False
         self.offset_x = 0
@@ -24,8 +26,8 @@ class Calliberation:
 
         self.eventHandler = EventHandler()
         self.eventHandler.registerEvent("quit",Event(pygame.QUIT,lambda _ : GameGlobals.doQuit()))
-        self.eventHandler.registerEvent("quit_by_press_q",Event( pygame.KEYDOWN, lambda _ : GameGlobals.doQuit(),lambda e : print("from lambda",e.key == pygame.K_q), condition = lambda e : e.key == pygame.K_q))
-        self.eventHandler.registerEvent("setCalliber",Event( pygame.KEYDOWN, lambda _ : Camera.setCrop(self.cropping_rect.x,self.cropping_rect.y,self.cropping_rect.width,self.cropping_rect.height), lambda _ : GameGlobals.setIsCameraCallibered(True),lambda _:self.saveCalliberationData() ,lambda e : print(e.key == pygame.K_c),condition=lambda e : e.key == pygame.K_c))
+        self.eventHandler.registerEvent("quit_by_press_q",Event( pygame.KEYDOWN, lambda _ : GameGlobals.doQuit(), condition = lambda e : e.key == pygame.K_q))
+        self.eventHandler.registerEvent("setCalliber",Event( pygame.KEYDOWN, lambda _ : Camera.setCrop(self.cropping_rect.x,self.cropping_rect.y,self.cropping_rect.width,self.cropping_rect.height), lambda _ : GameGlobals.setIsCameraCallibered(True),lambda _:self.saveCalliberationData() ,condition=lambda e : e.key == pygame.K_c))
         self.eventHandler.registerEvent("reCalliber",Event(    pygame.KEYDOWN,    lambda _ :GameGlobals.setIsCameraCallibered(False),    condition= lambda e : e.key == pygame.K_r))
         self.eventHandler.registerEvent("start playing",Event(    pygame.KEYDOWN,    lambda _ :GameGlobals.setStartToPlay(True),    condition= lambda e : e.key == pygame.K_p))
         self.eventHandler.registerEvent("handleResize",Event(pygame.MOUSEBUTTONDOWN,lambda e : self.handleResize(e),lambda event: self.cropping_rect.collidepoint(event.pos)))
@@ -71,13 +73,15 @@ class Calliberation:
         )
     
     def saveCalliberationData(self):
+        configFilePath = getPersistentPath("config.json")
+        print(configFilePath)
         try:
-            with open("../config.json","r") as fp:
+            with open(configFilePath,"r") as fp:
                 data = json.load(fp)
         except:
             data = {}
-        with open("config.json","w") as fp:
-            print("from setCrop -> config.json -> write mode")
+        with open(configFilePath,"w") as fp:
+            #print("from setCrop -> config.json -> write mode")
             data["calliberationCords"] = {
                 "x":self.cropping_rect.x, "y":self.cropping_rect.y , "width":self.cropping_rect.width , "height":self.cropping_rect.height
             }
