@@ -1,16 +1,14 @@
-import pygame
-from camera import Camera
-from game import Game
-from gameState import GameState
-from pygameRender import PyGameRender
+from Calliberation import Calliberation
+from ClimbBall import ClimbBall
+from gameGlobals import GameGlobals
 
+game = ClimbBall()
+# def main():
+calliberation = Calliberation()
+while not GameGlobals.quit:
+    if GameGlobals.startToPlay:
+        game.play()
+    else:
+        calliberation.doCaliber()
 
-while GameState.running:
-    if GameState.state == 'play':
-        # PyGameRender.screen = pygame.display.set_mode((GameGlobals.screen_width, GameGlobals.screen_height))
-        Game.play()
-    if GameState.state == 'start':
-        Game.startScreen()
-    
-Camera.cam.release()
-pygame.quit()
+# main()
