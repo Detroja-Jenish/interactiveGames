@@ -3,7 +3,7 @@ from Game.AstroidShooter import AstroidShooter
 from Game.ClimbBall import ClimbBall
 from gameGlobals import GameGlobals
 import pygame
-game = AstroidShooter()
+game = ClimbBall()
 # def main():
 calliberation = Calliberation()
 while not GameGlobals.quit:

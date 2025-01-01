@@ -7,7 +7,11 @@ from utils.getPersistentPath import getPersistentPath
 # from pygameRender import PyGameRender
 class Camera:
     # cam = cv2.VideoCapture(0)
-    cam = cv2.VideoCapture("http://192.168.227.191:4747/video")
+    cameraSource = input("Camera source: - ")
+    try:
+        cam = cv2.VideoCapture(int(cameraSource))
+    except Exception as e:
+        cam = cv2.VideoCapture(cameraSource)
     ret, frame = cam.read()
     height, width = GameGlobals.screen_height,GameGlobals.screen_width 
     x,y,w,h = 0,0,0,0
@@ -15,7 +19,7 @@ class Camera:
     @classmethod
     def readFrame(cls):
         cls.ret, cls.frame = Camera.cam.read()
-        # cls.frame = cv2.flip(cls.frame, 1)
+        cls.frame = cv2.flip(cls.frame, 1)
         cls.frame = cv2.resize(cls.frame, (cls.width, cls.height))
         cls.video_writer.write(cls.frame)
         if GameGlobals.isCameraCallibered:
@@ -26,4 +30,3 @@ class Camera:
     @classmethod 
     def setCrop(cls, x,y,w,h):
         cls.x,cls.y,cls.w,cls.h = x,y,w,h
-        

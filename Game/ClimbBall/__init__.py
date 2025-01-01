@@ -1,15 +1,19 @@
-
+import time
 from Camera import Camera
 from EventHandler import Event, EventHandler
 from Game.ClimbBall.Background.BlueOrangeGradient import BlueOrangeGradient
 from Game.ClimbBall.Background.Space import Space
 from Game.ClimbBall.gameState import GameState
 from HandDetection import HandDetection
+from PoseEstimater import PoseEstimater
 from gameGlobals import GameGlobals
 import pygame
+import numpy as np
 
 class ClimbBall:
     def __init__(self):
+        self.prev_frame_time = 0
+        self.new_frame_time = 0
         if(int(input("enter background number"))):
             self.background = Space()
         else:
@@ -25,10 +29,14 @@ class ClimbBall:
         Camera.readFrame()
         if not Camera.ret:
             raise "error occurred"
-        results = HandDetection.detectHand(Camera.frame)
+        self.new_frame_time = time.time() 
+        results = PoseEstimater.detectHand(Camera.frame)
         # GameGlobals.screen.fill((200, 200, 200))
         # drawBackground(GameGlobals.screen)
-        self.background.draw()
+
+        frame_surface = pygame.surfarray.make_surface(np.transpose(Camera.frame, (1, 0, 2)))
+        GameGlobals.screen.blit(frame_surface, (0, 0))
+        # self.background.draw()
 
         if results:
             for index, hand in enumerate(results):
@@ -43,6 +51,12 @@ class ClimbBall:
         right_score = GameGlobals.font.render(str(self.gameState.right_score), True, self.background.scorePointColor)
         GameGlobals.screen.blit(left_score, (GameGlobals.screen_width // 4, 10))
         GameGlobals.screen.blit(right_score, (3 * GameGlobals.screen_width // 4, 10))
+
+        fps = 1/(self.new_frame_time-self.prev_frame_time) 
+        self.prev_frame_time = self.new_frame_time 
+        fps = int(fps)
+        fps_to_render = GameGlobals.font.render(str(fps), True, (255,0,0))
+        GameGlobals.screen.blit(fps_to_render, ( GameGlobals.screen_width // 2, 10))
 
         pygame.display.flip()
         self.eventHandler.checkEventOccurnce()
