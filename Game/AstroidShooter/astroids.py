@@ -12,7 +12,7 @@ images =[ pygame.image.load(path.abspath(path.dirname(path.dirname(path.abspath(
         pygame.image.load(path.abspath(path.dirname(path.dirname(path.abspath(__file__)))+'../../assets/images/Meteors/Meteor_07.png')),
         pygame.image.load(path.abspath(path.dirname(path.dirname(path.abspath(__file__)))+'../../assets/images/Meteors/Meteor_10.png'))
         ]
-explosionSound = pygame.mixer.Sound(path.abspath(path.dirname(path.dirname(path.abspath(__file__))))+'../../assets/sounds/explosion.wav')
+explosionSound = pygame.mixer.Sound(path.abspath(path.dirname(path.dirname(path.abspath(__file__))))+'/../assets/sounds/explosion.wav')
 class __Astroid__:
     def __init__(self, x, y, radius, color, speed_x, speed_y):
         self.x = x

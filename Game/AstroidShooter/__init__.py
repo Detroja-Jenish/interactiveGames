@@ -4,8 +4,6 @@ from EventHandler import Event, EventHandler
 from Game.AstroidShooter.Background.Space import Space
 from Game.AstroidShooter.Shooter import Shooter
 from Game.AstroidShooter.astroids import AstroidHandler
-
-from HandDetection import HandDetection
 from PoseEstimater import PoseEstimater
 from gameGlobals import GameGlobals
 import pygame
@@ -29,9 +27,9 @@ class AstroidShooter:
         
         self.astroidHandler.moveAstroids()
         self.shooter.moveBullet()
-        if (self.astroidHandler.detectCollisonWithAstroids(self.shooter.bullet) or (not self.shooter.isBulletAlive)) and results and results[0].leftHand:
-            dx = (results[0].leftHand.point2[0] - results[0].leftHand.point1[0])*GameGlobals.screen_width
-            dy = (results[0].leftHand.point2[1] - results[0].leftHand.point1[1])*GameGlobals.screen_height
+        if (self.astroidHandler.detectCollisonWithAstroids(self.shooter.bullet) or (not self.shooter.isBulletAlive)) and results and results[0].rightHand:
+            dx = (results[0].rightHand.point2[0] - results[0].rightHand.point1[0])*GameGlobals.screen_width
+            dy = (results[0].rightHand.point2[1] - results[0].rightHand.point1[1])*GameGlobals.screen_height
             angle = math.atan2(dy,dx)
             self.shooter.shoot( angle )
         self.shooter.draw()

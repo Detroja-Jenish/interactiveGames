@@ -16,18 +16,21 @@ class GameGlobals:
     startToPlay = False
     clock = pygame.time.Clock()
     config = {
-        "calliberationCords": {
-            "x": 20,
-            "y": 20,
-            "width": screen_width-20,
-            "height": screen_height-20
-        },
-        "cameraSource": 0,
-        "climbBall": {
-            "background": 0
-        },
-        "astroidShooter": {}
-    }
+    "calliberationCords": {
+        "x": 14,
+        "y": 13,
+        "width": 1400,
+        "height": 818
+    },
+    "camera": {
+        "source": 0,
+        "flip": False
+    },
+    "climbBall": {
+        "background": 0
+    },
+    "astroidShooter": {}
+}
     try:
         with open(getPersistentPath("config.json"),"r") as fp:
             config = json.load(fp)

@@ -70,14 +70,9 @@ class Calliberation:
     def saveCalliberationData(self):
         configFilePath = getPersistentPath("config.json")
         print(configFilePath)
-        try:
-            with open(configFilePath,"r") as fp:
-                data = json.load(fp)
-        except:
-            data = {}
         with open(configFilePath,"w") as fp:
             #print("from setCrop -> config.json -> write mode")
-            data["calliberationCords"] = {
+            GameGlobals.config["calliberationCords"] = {
                 "x":self.cropping_rect.x, "y":self.cropping_rect.y , "width":self.cropping_rect.width , "height":self.cropping_rect.height
             }
-            json.dump(data,fp,indent=4)
+            json.dump(GameGlobals.config,fp,indent=4)
