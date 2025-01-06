@@ -2,7 +2,7 @@ import math
 import random
 from gameGlobals import GameGlobals
 import pygame
-bulletShootSound = pygame.mixer.Sound('/Users/jenishdetroja/Desktop/dev/python_project/OpenCv_projects/ping-pong-cv/v11/assets/sounds/bulletShoot.mp3')
+bulletShootSound = pygame.mixer.Sound(path.abspath(path.dirname(path.dirname(path.abspath(__file__))))+'../../assets/sounds/bulletShoot.mp3')
 
 class __Bullet__():
     def __init__(self,x,y,radius,color,speed_x,speed_y):

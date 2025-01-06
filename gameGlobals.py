@@ -1,6 +1,8 @@
-
 import pygame
 import os
+import json
+
+from utils.getPersistentPath import getPersistentPath 
 class GameGlobals:
     os.environ["SDL_VIDEO_CENTERED"] = '1'
     pygame.init()
@@ -13,6 +15,24 @@ class GameGlobals:
     isCameraCallibered = False
     startToPlay = False
     clock = pygame.time.Clock()
+    config = {
+        "calliberationCords": {
+            "x": 20,
+            "y": 20,
+            "width": screen_width-20,
+            "height": screen_height-20
+        },
+        "cameraSource": 0,
+        "climbBall": {
+            "background": 0
+        },
+        "astroidShooter": {}
+    }
+    try:
+        with open(getPersistentPath("config.json"),"r") as fp:
+            config = json.load(fp)
+    except Exception as e:
+        pass
     @classmethod 
     def doQuit(cls):
         cls.quit = True

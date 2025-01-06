@@ -1,10 +1,12 @@
 import math
 from Camera import Camera
 from EventHandler import Event, EventHandler
+from Game.AstroidShooter.Background.Space import Space
 from Game.AstroidShooter.Shooter import Shooter
 from Game.AstroidShooter.astroids import AstroidHandler
-from Game.ClimbBall.Background.Space import Space
+
 from HandDetection import HandDetection
+from PoseEstimater import PoseEstimater
 from gameGlobals import GameGlobals
 import pygame
 
@@ -22,14 +24,14 @@ class AstroidShooter:
         Camera.readFrame()
         if not Camera.ret:
             raise "error occurred"
-        results = HandDetection.detectHand(Camera.frame)
+        results = PoseEstimater.detectHand(Camera.frame)
         self.background.draw()
         
         self.astroidHandler.moveAstroids()
         self.shooter.moveBullet()
-        if (self.astroidHandler.detectCollisonWithAstroids(self.shooter.bullet) or (not self.shooter.isBulletAlive)) and results:
-            dx = (results[0].point2.x - results[0].point1.x)*GameGlobals.screen_width
-            dy = (results[0].point2.y - results[0].point1.y)*GameGlobals.screen_height
+        if (self.astroidHandler.detectCollisonWithAstroids(self.shooter.bullet) or (not self.shooter.isBulletAlive)) and results and results[0].leftHand:
+            dx = (results[0].leftHand.point2[0] - results[0].leftHand.point1[0])*GameGlobals.screen_width
+            dy = (results[0].leftHand.point2[1] - results[0].leftHand.point1[1])*GameGlobals.screen_height
             angle = math.atan2(dy,dx)
             self.shooter.shoot( angle )
         self.shooter.draw()

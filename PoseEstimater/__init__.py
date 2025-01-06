@@ -21,13 +21,33 @@ class GetKeypoint:
     LEFT_ANKLE     = 15
     RIGHT_ANKLE    = 16
 class Hand:
-    def __init__(self, center_x, center_y, radius, color,point1,point2):
+    def __init__(self, center_x, center_y,point1,point2,radius=140, color=(255,0,0)):
         self.center_x = center_x
         self.center_y = center_y
         self.radius = radius // 2
         self.color = color
         self.point1 = point1
         self.point2 = point2
+class Leg(Hand):
+    pass
+class Nose(Hand):
+    pass
+
+class Person:
+    def __init__(self,rightHand=None, leftHand=None, rightLeg=None, leftLeg=None, nose=None):
+        self.rightHand = rightHand
+        self.leftHand = leftHand
+        self.leftLeg = leftLeg
+        self.rightLeg = rightLeg
+        self.nose = nose
+    def getNotNoneValues(self,takeRightHand=True, takeLeftHand=True, takeRightLeg=True, takeLeftLeg=True, takeNose=True):
+        arr = []
+        if self.leftHand and takeLeftHand:arr.append(self.leftHand)
+        if self.rightHand and takeRightHand: arr.append(self.rightHand)
+        if self.leftLeg and takeLeftLeg: arr.append(self.leftLeg)
+        if self.rightLeg and takeRightLeg: arr.append(self.rightLeg)
+        if self.nose and takeNose: arr.append(self.nose)
+        return arr
 
 class PoseEstimater:
     model = YOLO("yolo11n-pose.pt")
@@ -50,8 +70,8 @@ class PoseEstimater:
         return {"x": x, "y":y}
     
     @classmethod
-    def getHands(cls,keypoints):
-        hands = []
+    def getPersonsKeypoints(cls,keypoints):
+        person = Person()
         try:
             leftElbow = keypoints[GetKeypoint.LEFT_ELBOW]
             rightElbow = keypoints[GetKeypoint.RIGHT_ELBOW]
@@ -61,60 +81,56 @@ class PoseEstimater:
             leftAnkle = keypoints[GetKeypoint.LEFT_ANKLE]
             rightKnee = keypoints[GetKeypoint.RIGHT_KNEE]
             rightAnkle = keypoints[GetKeypoint.RIGHT_ANKLE]
+            leftEar = keypoints[GetKeypoint.LEFT_EAR]
+            rightEar = keypoints[GetKeypoint.RIGHT_EAR]
             nose = keypoints[GetKeypoint.NOSE]
-            print(f"====================      {nose}")
         except Exception:
             pass
 
         try:
             hand1_cordinates = cls.extendLine(leftElbow, leftWrist,100)
             if hand1_cordinates["x"] != 0 and hand1_cordinates["y"] != 0:
-                print(f"left ->>>> elbow :- {leftElbow}   ,   wrist = {leftWrist},    extended = {hand1_cordinates} ")
-                hands.append(Hand(hand1_cordinates["x"],hand1_cordinates["y"], 140, (255,0,0), leftWrist, (hand1_cordinates["x"],hand1_cordinates["y"])))
+                person.leftHand = Hand(hand1_cordinates["x"],hand1_cordinates["y"],  leftElbow, leftWrist)
         except Exception:
             pass
         try:
             hand2_cordinates = cls.extendLine(rightElbow, rightWrist,100)
             if hand2_cordinates["x"] != 0 and hand2_cordinates["y"] != 0:
-                print(f"right ->>>> elbow :- {rightElbow}   ,   wrist = {rightWrist},    extended = {hand2_cordinates} ")
-                hands.append(Hand(hand2_cordinates["x"],hand2_cordinates["y"], 140, (255,0,0), leftWrist, (hand2_cordinates["x"],hand2_cordinates["y"])))
+                person.rightHand = Hand(hand2_cordinates["x"],hand2_cordinates["y"],  rightElbow, rightWrist)
         except Exception:
             pass
 
         try:
             leg1_cordinates = cls.extendLine(leftKnee, leftAnkle,50)
             if leg1_cordinates["x"] != 0 and leg1_cordinates["y"] != 0:
-                print(f"left ->>>> knee :- {leftKnee}   ,   ankle = {leftAnkle},    extended = {leg1_cordinates} ")
-                hands.append(Hand(leg1_cordinates["x"],leg1_cordinates["y"], 140, (255,0,0), leftWrist, (leg1_cordinates["x"],leg1_cordinates["y"])))
+                person.leftLeg=Hand(leg1_cordinates["x"],leg1_cordinates["y"],  leftKnee, leftAnkle)
         except Exception:
             pass
 
         try:
             leg2_cordinates = cls.extendLine(rightKnee, rightAnkle,50)
             if leg2_cordinates["x"] != 0 and leg2_cordinates["y"] != 0:
-                print(f"left ->>>> knee :- {rightKnee}   ,   ankle = {rightAnkle},    extended = {leg2_cordinates} ")
-                hands.append(Hand(leg2_cordinates["x"],leg2_cordinates["y"], 140, (255,0,0), leftWrist, (leg2_cordinates["x"],leg2_cordinates["y"])))
+                person.rightLeg = Hand(leg2_cordinates["x"],leg2_cordinates["y"],  rightKnee, rightAnkle)
         except Exception:
             pass
         try:
             if nose[0] != 0 and nose[1] != 0:
-                print(f" face ->>>> nose :- {nose} ")
-                # hands.append(Hand(int(nose[0]) + 100,int(nose[1]), 70, (255,0,0), leftWrist, (nose[0],nose[1])))
+                person.nose = Hand(int(nose[0]),int(nose[1]), leftEar,rightEar)
         except Exception as e:
             pass
 
 
-        return hands
+        return person
     
     @classmethod
     def detectHand(cls,frame):
-        hands = []
+        persons = []
         results = cls.model(frame)
         for result in results:
             for keypoints in result.keypoints.xy.cpu().numpy():
-                hands.extend(cls.getHands(keypoints))
+                persons.append(cls.getPersonsKeypoints(keypoints))
         
-        return hands if len(hands) > 0 else None
+        return persons if len(persons) > 0 else None
     
     @classmethod
     def draw_poses(cls, frame):

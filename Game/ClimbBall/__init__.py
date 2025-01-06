@@ -4,7 +4,6 @@ from EventHandler import Event, EventHandler
 from Game.ClimbBall.Background.BlueOrangeGradient import BlueOrangeGradient
 from Game.ClimbBall.Background.Space import Space
 from Game.ClimbBall.gameState import GameState
-from HandDetection import HandDetection
 from PoseEstimater import PoseEstimater
 from gameGlobals import GameGlobals
 import pygame
@@ -14,7 +13,7 @@ class ClimbBall:
     def __init__(self):
         self.prev_frame_time = 0
         self.new_frame_time = 0
-        if(int(input("enter background number"))):
+        if(GameGlobals.config["climbBall"]["background"]):
             self.background = Space()
         else:
             self.background = BlueOrangeGradient()
@@ -39,9 +38,10 @@ class ClimbBall:
         self.background.draw()
 
         if results:
-            for index, hand in enumerate(results):
-                pygame.draw.circle(GameGlobals.screen, hand.color, (hand.center_x, hand.center_y), hand.radius, 0)
-                self.gameState.ball.check_collision_with_hand(hand.center_x, hand.center_y, hand.radius)
+            for index, person in enumerate(results):
+                for paddle in person.getNotNoneValues(takeNose=False):
+                    pygame.draw.circle(GameGlobals.screen, paddle.color, (paddle.center_x, paddle.center_y), paddle.radius, 0)
+                    self.gameState.ball.check_collision_with_hand(paddle)
             
 
         self.gameState.ball.move();

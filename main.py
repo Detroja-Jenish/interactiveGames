@@ -4,8 +4,8 @@ from Game.ClimbBall import ClimbBall
 from gameGlobals import GameGlobals
 import pygame
 import cv2
-game = ClimbBall()
-# game = AstroidShooter()
+# game = ClimbBall()
+game = AstroidShooter()
 # def main():
 calliberation = Calliberation()
 while not GameGlobals.quit:
@@ -17,4 +17,4 @@ while not GameGlobals.quit:
 # main()
 pygame.mixer.music.stop()
 pygame.quit()
-cv2.ReleaseAll();
+# cv2.releaseAll();

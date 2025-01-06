@@ -7,11 +7,9 @@ from utils.getPersistentPath import getPersistentPath
 # from pygameRender import PyGameRender
 class Camera:
     # cam = cv2.VideoCapture(0)
-    cameraSource = input("Camera source: - ")
-    try:
-        cam = cv2.VideoCapture(int(cameraSource))
-    except Exception as e:
-        cam = cv2.VideoCapture(cameraSource)
+    
+    cam = cv2.VideoCapture(GameGlobals.config["camera"]["source"])
+    isNeedToFlip = GameGlobals.config["camera"]["flip"]
     ret, frame = cam.read()
     height, width = GameGlobals.screen_height,GameGlobals.screen_width 
     x,y,w,h = 0,0,0,0
@@ -19,7 +17,8 @@ class Camera:
     @classmethod
     def readFrame(cls):
         cls.ret, cls.frame = Camera.cam.read()
-        # cls.frame = cv2.flip(cls.frame, 1)
+        if cls.isNeedToFlip:
+            cls.frame = cv2.flip(cls.frame, 1)
         cls.frame = cv2.resize(cls.frame, (cls.width, cls.height))
         cls.video_writer.write(cls.frame)
         if GameGlobals.isCameraCallibered:

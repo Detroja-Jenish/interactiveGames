@@ -1,4 +1,5 @@
 import random
+
 from Interfaces.IBackground import IBackground
 from gameGlobals import GameGlobals
 import pygame

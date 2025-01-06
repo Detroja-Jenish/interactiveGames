@@ -9,16 +9,10 @@ from utils.getPersistentPath import getPersistentPath
 
 class Calliberation:
     def __init__(self):
-        try:
-            configFilePath = getPersistentPath("config.json")
-            with open(configFilePath,"r") as fp:
-                data = json.load(fp)
                 #print(data)
-                self.cropping_rect = pygame.Rect(data["calliberationCords"]["x"], data["calliberationCords"]["y"], data["calliberationCords"]["width"], data["calliberationCords"]["height"])
+        self.cropping_rect = pygame.Rect(GameGlobals.config["calliberationCords"]["x"], GameGlobals.config["calliberationCords"]["y"], GameGlobals.config["calliberationCords"]["width"], GameGlobals.config["calliberationCords"]["height"])
                 
-        except:
             #print("exception genrated while creating cropping retangle")
-            self.cropping_rect = pygame.Rect(0, 0, 109, 66)
         self.resizing = False
         self.moving = False
         self.offset_x = 0
@@ -86,4 +80,4 @@ class Calliberation:
             data["calliberationCords"] = {
                 "x":self.cropping_rect.x, "y":self.cropping_rect.y , "width":self.cropping_rect.width , "height":self.cropping_rect.height
             }
-            json.dump(data,fp)
+            json.dump(data,fp,indent=4)

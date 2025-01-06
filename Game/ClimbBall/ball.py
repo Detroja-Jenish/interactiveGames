@@ -26,13 +26,17 @@ class Ball:
         if self.y - self.radius <= 0 or self.y + self.radius >= GameGlobals.screen_height:
             self.speed_y *= -1
 
-    def check_collision_with_hand(self, hand_x, hand_y, hand_radius):
+    def check_collision_with_hand(self,paddle):
+        if not paddle: return
+        paddle_x = paddle.center_x
+        paddle_y = paddle.center_y
+        paddle_radius = paddle.radius
         # Calculate the distance between the ball and the hand center
-        distance = math.sqrt((self.x - hand_x)**2 + (self.y - hand_y)**2)
+        distance = math.sqrt((self.x - paddle_x)**2 + (self.y - paddle_y)**2)
 
-        if distance <= self.radius + hand_radius:
+        if distance <= self.radius + paddle_radius:
             # If there's a collision, calculate the normal vector
-            normal = np.array([self.x - hand_x, self.y - hand_y])
+            normal = np.array([self.x - paddle_x, self.y - paddle_y])
             normal = normal / np.linalg.norm(normal)  # Normalize the normal vector
 
             # Velocity vector of the ball
@@ -46,7 +50,7 @@ class Ball:
             self.speed_x, self.speed_y = reflected_velocity
 
             # Apply a small displacement to avoid the ball getting stuck in the hand
-            displacement = normal * (self.radius + hand_radius - distance + 1)
+            displacement = normal * (self.radius + paddle_radius - distance + 1)
             self.x += displacement[0]
             self.y += displacement[1]
             self.accelration += 1

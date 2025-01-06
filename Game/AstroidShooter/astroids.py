@@ -1,16 +1,18 @@
 import math
+import sys
 from gameGlobals import GameGlobals
 import random
 import pygame
 import time
 from threading import Thread
-images =[ pygame.image.load('/Users/jenishdetroja/Desktop/dev/python_project/OpenCv_projects/ping-pong-cv/v11/assets/images/Meteors/Meteor_01.png'),
-        pygame.image.load('/Users/jenishdetroja/Desktop/dev/python_project/OpenCv_projects/ping-pong-cv/v11/assets/images/Meteors/Meteor_03.png'),
-        pygame.image.load('/Users/jenishdetroja/Desktop/dev/python_project/OpenCv_projects/ping-pong-cv/v11/assets/images/Meteors/Meteor_05.png'),
-        pygame.image.load('/Users/jenishdetroja/Desktop/dev/python_project/OpenCv_projects/ping-pong-cv/v11/assets/images/Meteors/Meteor_07.png'),
-        pygame.image.load('/Users/jenishdetroja/Desktop/dev/python_project/OpenCv_projects/ping-pong-cv/v11/assets/images/Meteors/Meteor_10.png')
+from os import path
+images =[ pygame.image.load(path.abspath(path.dirname(path.dirname(path.abspath(__file__)))+'../../assets/images/Meteors/Meteor_01.png')),
+        pygame.image.load(path.abspath(path.dirname(path.dirname(path.abspath(__file__)))+'../../assets/images/Meteors/Meteor_03.png')),
+        pygame.image.load(path.abspath(path.dirname(path.dirname(path.abspath(__file__)))+'../../assets/images/Meteors/Meteor_05.png')),
+        pygame.image.load(path.abspath(path.dirname(path.dirname(path.abspath(__file__)))+'../../assets/images/Meteors/Meteor_07.png')),
+        pygame.image.load(path.abspath(path.dirname(path.dirname(path.abspath(__file__)))+'../../assets/images/Meteors/Meteor_10.png'))
         ]
-explosionSound = pygame.mixer.Sound('/Users/jenishdetroja/Desktop/dev/python_project/OpenCv_projects/ping-pong-cv/v11/assets/sounds/explosion.wav')
+explosionSound = pygame.mixer.Sound(path.abspath(path.dirname(path.dirname(path.abspath(__file__))))+'../../assets/sounds/explosion.wav')
 class __Astroid__:
     def __init__(self, x, y, radius, color, speed_x, speed_y):
         self.x = x
@@ -47,7 +49,7 @@ class AstroidHandler:
     def __init__(self):
         self.astroids = []
         self.needToGenrateAstroids = True
-        Thread(target=self.__genrateAstroids__).start()
+        Thread(target=self.__genrateAstroids__,daemon=True).start()
     
     def stopGenratingAstroids(self):
         self.needToGenrateAstroids = False
