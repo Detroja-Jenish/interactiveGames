@@ -33,7 +33,7 @@ class __Astroid__:
         resized_image = pygame.transform.scale(images[self.imageID], (self.radius*2, self.radius*2))
         image_rect = resized_image.get_rect()
         image_rect.center = (self.x,self.y)
-        pygame.draw.circle(GameGlobals.screen, self.color, (self.x, self.y), self.radius) 
+        # pygame.draw.circle(GameGlobals.screen, self.color, (self.x, self.y), self.radius) 
         pygame.draw.circle(GameGlobals.screen, (0,0,0,0), (self.x, self.y), self.radius) 
         GameGlobals.screen.blit(resized_image, image_rect)
 
@@ -73,15 +73,14 @@ class AstroidHandler:
             if outOfBound :
                 self.astroids.remove(astroid)
 
-    def detectCollisonWithAstroids(self,bullet):
+    def detectCollisonWithAstroids(self,bullets):
         flag = False
         for astroid in self.astroids:
-            if astroid.isCollideBullet(bullet):
-                self.astroids.remove(astroid)
-                flag = True
-                break
-        if flag:
-            explosionSound.play()
+            for bullet in bullets:
+                if astroid.isCollideBullet(bullet):
+                    bullets.remove(bullet)
+                    self.astroids.remove(astroid)
+                    explosionSound.play()
         return flag
     
     def drawAstroids(self):

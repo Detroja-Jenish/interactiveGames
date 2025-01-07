@@ -1,10 +1,7 @@
 from datetime import datetime
 import cv2
 from gameGlobals import GameGlobals
-import json
-
 from utils.getPersistentPath import getPersistentPath
-# from pygameRender import PyGameRender
 class Camera:
     # cam = cv2.VideoCapture(0)
     

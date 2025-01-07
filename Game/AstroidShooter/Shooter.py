@@ -15,12 +15,14 @@ class __Bullet__():
         self.speed_x = speed_x
         self.speed_y = speed_y
         self.accelration = 1
+        self.isAlive = True
         bulletShootSound.play()
 
     def move(self):
         self.x += self.speed_x*self.accelration
         self.y += self.speed_y*self.accelration
-
+        if self.y <= 0 or self.y >= GameGlobals.screen_height or self.x >= GameGlobals.screen_width or self.x <= 0:
+            self.isAlive = False
         return self.y <= 0 or self.y >= GameGlobals.screen_height or self.x >= GameGlobals.screen_width or self.x <= 0
     
     def draw(self):
@@ -33,20 +35,39 @@ class Shooter():
         self.radius = 50
         self.isBulletAlive = False;
         self.bullet_speed = 10
+        self.noOfBullet = 3
+        self.bullets = []
         self.shoot(math.atan2(0,1))
 
     def draw(self):
         pygame.draw.circle(GameGlobals.screen, (255,0,0), (self.x, self.y), self.radius)
-        self.bullet.move()
-        self.bullet.draw()
+        for bullet in self.bullets:
+            bullet.draw()
 
     def moveBullet(self):
-        isOutBound = self.bullet.move()
-        if isOutBound:
-            self.isBulletAlive = False
+        for bullet in self.bullets:
+            bullet.move()
+        
 
     def shoot(self, angle):
         self.isBulletAlive = True
-        self.bullet = __Bullet__(self.x,self.y,10, (0,255,0),math.cos(angle)*self.bullet_speed,math.sin(angle)*self.bullet_speed)
+        angularDisplacement = 0.523599/(self.noOfBullet//2)
+        rightShift = angle
+        leftShift = angle
+
+        for _ in range(self.noOfBullet//2+1):
+            self.bullets.append(__Bullet__(self.x,self.y,10, (0,255,0),math.cos(rightShift)*self.bullet_speed,math.sin(rightShift)*self.bullet_speed))
+            if(rightShift != leftShift):
+                self.bullets.append(__Bullet__(self.x,self.y,10, (0,255,0),math.cos(leftShift)*self.bullet_speed,math.sin(leftShift)*self.bullet_speed))
+            rightShift += angularDisplacement
+            leftShift -= angularDisplacement
+    
+    def clearBullet(self):
+        for bullet in self.bullets:
+            if not bullet.isAlive:
+                self.bullets.remove(bullet)
+
+    def isAllBulletsDead(self):
+        return len(self.bullets) == 0
     
          
