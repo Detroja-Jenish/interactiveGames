@@ -31,16 +31,17 @@ class __Bullet__():
         pygame.draw.circle(GameGlobals.screen, self.color, (self.x, self.y), self.radius)
 
 class Shooter():
+    noOfBullet = 1
+    continuesShots = 1
     def __init__(self):
         self.x = 200
         self.y = GameGlobals.screen_height // 2
         self.radius = 50
         self.isBulletAlive = False;
         self.bullet_speed = 10
-        self.noOfBullet = 3
         self.bullets = []
-        self.continuesShots = 10
         
+        self.angle = 0
 
     def draw(self):
         pygame.draw.circle(GameGlobals.screen, (255,0,0), (self.x, self.y), self.radius)
@@ -52,8 +53,8 @@ class Shooter():
             bullet.move()
         
 
-    def shoot(self, angle):
-        threading.Thread(target=self.__shoot__, args=(angle, self.noOfBullet, self.continuesShots,0.5), daemon=True).start()
+    def shoot(self):
+        threading.Thread(target=self.__shoot__, args=( Shooter.noOfBullet, Shooter.continuesShots,0.5), daemon=True).start()
         # try:
         #     angularDisplacement = (10*math.pi / 180)/(self.noOfBullet//2)
         # except Exception :
@@ -68,15 +69,15 @@ class Shooter():
         #     rightShift += angularDisplacement
         #     leftShift -= angularDisplacement
     
-    def __shoot__(self,angle,noOfBullet,continuesShots,interval):
+    def __shoot__(self,noOfBullet,continuesShots,interval):
         try:
             angularDisplacement = (10*math.pi / 180)/(noOfBullet//2)
         except Exception :
             angularDisplacement = 0
         
         for _ in range(continuesShots):
-            rightShift = angle
-            leftShift = angle
+            rightShift = self.angle
+            leftShift = self.angle
 
             for _ in range(noOfBullet//2+1):
                 self.bullets.append(__Bullet__(self.x,self.y,10, (0,255,0),math.cos(rightShift)*self.bullet_speed,math.sin(rightShift)*self.bullet_speed))

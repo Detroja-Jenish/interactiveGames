@@ -35,11 +35,13 @@ class AstroidShooter:
         self.shooter.moveBullet()
         self.astroidHandler.detectCollisonWithAstroids(self.shooter.bullets)
         
-        if ( self.shooter.isAllBulletsDead()) and results and results[0].rightHand:
+        if results and results[0].rightHand:
             dx = (results[0].rightHand.point2[0] - results[0].rightHand.point1[0])*GameGlobals.screen_width
             dy = (results[0].rightHand.point2[1] - results[0].rightHand.point1[1])*GameGlobals.screen_height
             angle = math.atan2(dy,dx)
-            self.shooter.shoot( angle )
+            self.shooter.angle = angle
+        if self.shooter.isAllBulletsDead() and results and results[0].rightHand:
+            self.shooter.shoot( )
 
         if results and results[0].rightHand:
             pygame.draw.circle(GameGlobals.screen,(0,0,255), (results[0].rightHand.center_x, results[0].rightHand.center_y), results[0].rightHand.radius)

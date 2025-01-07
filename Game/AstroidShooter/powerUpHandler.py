@@ -3,6 +3,7 @@ from random import choice, randint
 import threading
 from time import sleep
 from abc import ABC, abstractmethod
+from Game.AstroidShooter.Shooter import Shooter
 from Game.AstroidShooter.astroids import __Astroid__
 from gameGlobals import GameGlobals
 import pygame
@@ -33,10 +34,24 @@ class SlowDown(IPowerUp):
         self.isFinished = True
 
 class ThreeShots:
-    pass
+    def __init__(self):
+        self.color = (0,255,255)
+        self.isFinished = False
+    def run(self):
+        Shooter.noOfBullet = 3;
+        sleep(60)
+        Shooter.noOfBullet = 1;
+        self.isFinished = True
 
 class ContinuesShots:
-    pass
+    def __init__(self):
+        self.color = (50,110,255)
+        self.isFinished = False
+    def run(self):
+        Shooter.continuesShots = 10;
+        sleep(60)
+        Shooter.continuesShots = 1;
+        self.isFinished = True
 
 class PowerUp:
     def __init__(self,powerUp):
@@ -66,7 +81,7 @@ class PowerUp:
 
 class PowerUpHandler:
     def __init__(self):
-        self.powerUpList = [Freeze,SlowDown]
+        self.powerUpList = [Freeze,SlowDown,ThreeShots,ContinuesShots]
         self.powerUps = []
         threading.Thread(target=self.genratePowerUp, daemon=True).start()
     
