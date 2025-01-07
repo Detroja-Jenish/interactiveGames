@@ -27,9 +27,9 @@ class AstroidShooter:
         if not Camera.ret:
             raise "error occurred"
         results = PoseEstimater.detectHand(Camera.frame)
-        frame_surface = pygame.surfarray.make_surface(np.transpose(Camera.frame, (1, 0, 2)))
-        GameGlobals.screen.blit(frame_surface, (0, 0))
-        # self.background.draw()
+        # frame_surface = pygame.surfarray.make_surface(np.transpose(Camera.frame, (1, 0, 2)))
+        # GameGlobals.screen.blit(frame_surface, (0, 0))
+        self.background.draw()
         
         self.astroidHandler.moveAstroids()
         self.shooter.moveBullet()

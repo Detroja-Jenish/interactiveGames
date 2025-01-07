@@ -3,6 +3,8 @@ import random
 from gameGlobals import GameGlobals
 import pygame
 from os import path
+from time import sleep
+import threading
 # bulletShootSound = pygame.mixer.Sound(path.abspath(path.dirname(path.dirname(path.abspath(__file__))))+'../../assets/sounds/bulletShoot.mp3')
 bulletShootSound = pygame.mixer.Sound(path.abspath(path.dirname(path.dirname(path.abspath(__file__))))+'/../assets/sounds/bulletShoot.mp3')
 
@@ -14,7 +16,7 @@ class __Bullet__():
         self.color = color
         self.speed_x = speed_x
         self.speed_y = speed_y
-        self.accelration = 1
+        self.accelration = 2
         self.isAlive = True
         bulletShootSound.play()
 
@@ -37,7 +39,8 @@ class Shooter():
         self.bullet_speed = 10
         self.noOfBullet = 3
         self.bullets = []
-        self.shoot(math.atan2(0,1))
+        self.continuesShots = 10
+        
 
     def draw(self):
         pygame.draw.circle(GameGlobals.screen, (255,0,0), (self.x, self.y), self.radius)
@@ -50,18 +53,38 @@ class Shooter():
         
 
     def shoot(self, angle):
-        self.isBulletAlive = True
-        angularDisplacement = 0.523599/(self.noOfBullet//2)
-        rightShift = angle
-        leftShift = angle
+        threading.Thread(target=self.__shoot__, args=(angle, self.noOfBullet, self.continuesShots,0.5), daemon=True).start()
+        # try:
+        #     angularDisplacement = (10*math.pi / 180)/(self.noOfBullet//2)
+        # except Exception :
+        #     angularDisplacement = 0
+        # rightShift = angle
+        # leftShift = angle
 
-        for _ in range(self.noOfBullet//2+1):
-            self.bullets.append(__Bullet__(self.x,self.y,10, (0,255,0),math.cos(rightShift)*self.bullet_speed,math.sin(rightShift)*self.bullet_speed))
-            if(rightShift != leftShift):
-                self.bullets.append(__Bullet__(self.x,self.y,10, (0,255,0),math.cos(leftShift)*self.bullet_speed,math.sin(leftShift)*self.bullet_speed))
-            rightShift += angularDisplacement
-            leftShift -= angularDisplacement
+        # for _ in range(self.noOfBullet//2+1):
+        #     self.bullets.append(__Bullet__(self.x,self.y,10, (0,255,0),math.cos(rightShift)*self.bullet_speed,math.sin(rightShift)*self.bullet_speed))
+        #     if(rightShift != leftShift):
+        #         self.bullets.append(__Bullet__(self.x,self.y,10, (0,255,0),math.cos(leftShift)*self.bullet_speed,math.sin(leftShift)*self.bullet_speed))
+        #     rightShift += angularDisplacement
+        #     leftShift -= angularDisplacement
     
+    def __shoot__(self,angle,noOfBullet,continuesShots,interval):
+        try:
+            angularDisplacement = (10*math.pi / 180)/(noOfBullet//2)
+        except Exception :
+            angularDisplacement = 0
+        
+        for _ in range(continuesShots):
+            rightShift = angle
+            leftShift = angle
+
+            for _ in range(noOfBullet//2+1):
+                self.bullets.append(__Bullet__(self.x,self.y,10, (0,255,0),math.cos(rightShift)*self.bullet_speed,math.sin(rightShift)*self.bullet_speed))
+                if(rightShift != leftShift):
+                    self.bullets.append(__Bullet__(self.x,self.y,10, (0,255,0),math.cos(leftShift)*self.bullet_speed,math.sin(leftShift)*self.bullet_speed))
+                rightShift += angularDisplacement
+                leftShift -= angularDisplacement
+            sleep(interval)
     def clearBullet(self):
         for bullet in self.bullets:
             if not bullet.isAlive:
