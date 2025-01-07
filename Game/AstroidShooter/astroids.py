@@ -14,6 +14,7 @@ images =[ pygame.image.load(path.abspath(path.dirname(path.dirname(path.abspath(
         ]
 explosionSound = pygame.mixer.Sound(path.abspath(path.dirname(path.dirname(path.abspath(__file__))))+'/../assets/sounds/explosion.wav')
 class __Astroid__:
+    accelration = 1;
     def __init__(self, x, y, radius, color, speed_x, speed_y):
         self.x = x
         self.y = y
@@ -21,12 +22,11 @@ class __Astroid__:
         self.color = color
         self.speed_x = speed_x
         self.speed_y = speed_y
-        self.accelration = 1
         self.imageID = random.randint(0,4)
     
     def move(self):
-        self.x -= self.speed_x*self.accelration
-        self.y -= self.speed_y*self.accelration
+        self.x -= self.speed_x*__Astroid__.accelration
+        self.y -= self.speed_y*__Astroid__.accelration
         return self.x + self.radius <= 0
     
     def draw(self):
