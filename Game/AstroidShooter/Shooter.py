@@ -33,6 +33,7 @@ class __Bullet__():
 class Shooter():
     noOfBullet = 1
     continuesShots = 1
+    isContinuousShot = False
     def __init__(self):
         self.x = 200
         self.y = GameGlobals.screen_height // 2
@@ -75,7 +76,7 @@ class Shooter():
         except Exception :
             angularDisplacement = 0
         
-        for _ in range(continuesShots):
+        while(True):
             rightShift = self.angle
             leftShift = self.angle
 
@@ -85,6 +86,7 @@ class Shooter():
                     self.bullets.append(__Bullet__(self.x,self.y,10, (0,255,0),math.cos(leftShift)*self.bullet_speed,math.sin(leftShift)*self.bullet_speed))
                 rightShift += angularDisplacement
                 leftShift -= angularDisplacement
+            if not Shooter.isContinuousShot:break
             sleep(interval)
     def clearBullet(self):
         for bullet in self.bullets:

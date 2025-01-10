@@ -79,7 +79,9 @@ class AstroidHandler:
             for bullet in bullets:
                 if astroid.isCollideBullet(bullet):
                     bullets.remove(bullet)
-                    self.astroids.remove(astroid)
+                    try:self.astroids.remove(astroid)
+                    except Exception as e: pass
+
                     explosionSound.play()
         return flag
     

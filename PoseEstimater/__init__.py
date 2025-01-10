@@ -21,7 +21,7 @@ class GetKeypoint:
     LEFT_ANKLE     = 15
     RIGHT_ANKLE    = 16
 class Hand:
-    def __init__(self, center_x, center_y,point1,point2,radius=140, color=(255,0,0)):
+    def __init__(self, center_x, center_y,point1,point2,radius=70, color=(255,0,0)):
         self.center_x = center_x
         self.center_y = center_y
         self.radius = radius // 2
@@ -52,7 +52,7 @@ class Person:
 class PoseEstimater:
     model = YOLO("yolo11n-pose.pt")
     @classmethod
-    def extendLine(cls,pt1,pt2,distance=5):
+    def extendLine(cls,pt1,pt2,distance=10):
         x1,y1 = tuple(pt1.astype(int))
         x2,y2 = tuple(pt2.astype(int))
         if x1==0 and y1==0 or x2==0 and y2==0:
@@ -123,7 +123,7 @@ class PoseEstimater:
         return person
     
     @classmethod
-    def detectHand(cls,frame):
+    def detectPersons(cls,frame):
         persons = []
         results = cls.model(frame)
         for result in results:

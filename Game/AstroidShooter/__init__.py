@@ -26,10 +26,10 @@ class AstroidShooter:
         Camera.readFrame()
         if not Camera.ret:
             raise "error occurred"
-        results = PoseEstimater.detectHand(Camera.frame)
-        # frame_surface = pygame.surfarray.make_surface(np.transpose(Camera.frame, (1, 0, 2)))
-        # GameGlobals.screen.blit(frame_surface, (0, 0))
-        self.background.draw()
+        results = PoseEstimater.detectPersons(Camera.frame)
+        frame_surface = pygame.surfarray.make_surface(np.transpose(Camera.frame, (1, 0, 2)))
+        GameGlobals.screen.blit(frame_surface, (0, 0))
+        # self.background.draw()
         
         self.astroidHandler.moveAstroids()
         self.shooter.moveBullet()
@@ -40,6 +40,8 @@ class AstroidShooter:
             dy = (results[0].rightHand.point2[1] - results[0].rightHand.point1[1])*GameGlobals.screen_height
             angle = math.atan2(dy,dx)
             self.shooter.angle = angle
+            self.shooter.x = results[0].rightHand.center_x
+            self.shooter.y = results[0].rightHand.center_y
         if self.shooter.isAllBulletsDead() and results and results[0].rightHand:
             self.shooter.shoot( )
 
@@ -55,5 +57,3 @@ class AstroidShooter:
         self.powerUpHandler.draw()
         pygame.display.flip()
         self.eventHandler.checkEventOccurnce()
-
-# color,x,y,width,height, speed,target_x,target_y

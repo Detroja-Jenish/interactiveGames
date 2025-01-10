@@ -18,6 +18,8 @@ class Freeze(IPowerUp):
         self.color = (255,255,0)
         self.isFinished = False
     def run(self):
+        while __Astroid__.accelration!=1:
+            pass
         __Astroid__.accelration = 0;
         sleep(5)
         __Astroid__.accelration = 1;
@@ -28,6 +30,8 @@ class SlowDown(IPowerUp):
         self.color = (255,0,255)
         self.isFinished = False
     def run(self):
+        while __Astroid__.accelration != 1:
+            pass
         __Astroid__.accelration = 0.3;
         sleep(5)
         __Astroid__.accelration = 1;
@@ -38,6 +42,8 @@ class ThreeShots:
         self.color = (0,255,255)
         self.isFinished = False
     def run(self):
+        while Shooter.noOfBullet > 1:
+            pass
         Shooter.noOfBullet = 3;
         sleep(60)
         Shooter.noOfBullet = 1;
@@ -48,9 +54,11 @@ class ContinuesShots:
         self.color = (50,110,255)
         self.isFinished = False
     def run(self):
-        Shooter.continuesShots = 10;
-        sleep(60)
-        Shooter.continuesShots = 1;
+        while Shooter.isContinuousShot:
+            pass
+        Shooter.isContinuousShot = True;
+        sleep(6)
+        Shooter.isContinuousShot = False;
         self.isFinished = True
 
 class PowerUp:

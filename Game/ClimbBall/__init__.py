@@ -29,7 +29,7 @@ class ClimbBall:
         if not Camera.ret:
             raise "error occurred"
         self.new_frame_time = time.time() 
-        results = PoseEstimater.detectHand(Camera.frame)
+        results = PoseEstimater.detectPersons(Camera.frame)
         # GameGlobals.screen.fill((200, 200, 200))
         # drawBackground(GameGlobals.screen)
 
