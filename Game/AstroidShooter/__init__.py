@@ -19,8 +19,8 @@ class AstroidShooter:
         self.eventHandler = EventHandler()
         self.astroidHandler = AstroidHandler()
         self.powerUpHandler = PowerUpHandler()
-        self.eventHandler.registerEvent("quit",Event(pygame.QUIT,lambda _ : self.astroidHandler.stopGenratingAstroids() ,lambda _ : GameGlobals.doQuit()))
-        self.eventHandler.registerEvent("quit_by_press_q",Event( pygame.KEYDOWN,lambda _ : self.astroidHandler.stopGenratingAstroids(), lambda _ : GameGlobals.doQuit(), condition = lambda e : e.key == pygame.K_q))
+        self.eventHandler.registerEvent("quit",Event(pygame.QUIT,lambda _ : self.astroidHandler.stopGenratingAstroids() ,lambda _ : GameGlobals.setGame(None)))
+        self.eventHandler.registerEvent("quit_by_press_q",Event( pygame.KEYDOWN,lambda _ : self.astroidHandler.stopGenratingAstroids(), lambda _ : GameGlobals.setGame(None), condition = lambda e : e.key == pygame.K_q))
 
     def play(self):
         Camera.readFrame()

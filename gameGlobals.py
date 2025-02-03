@@ -15,6 +15,7 @@ class GameGlobals:
     isCameraCallibered = False
     startToPlay = False
     clock = pygame.time.Clock()
+    game = None
     config = {
     "calliberationCords": {
         "x": 14,
@@ -46,4 +47,8 @@ class GameGlobals:
     @classmethod 
     def setStartToPlay(cls,flag):
         cls.startToPlay = flag
+    
+    @classmethod
+    def setGame(cls,game):
+        cls.game = game
 
