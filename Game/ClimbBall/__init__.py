@@ -22,8 +22,6 @@ class ClimbBall:
         self.eventHandler.registerEvent("quit",Event(pygame.QUIT,lambda _ : GameGlobals.setGame(None)))
         self.eventHandler.registerEvent("quit_by_press_q",Event( pygame.KEYDOWN, lambda _ : GameGlobals.setGame(None), condition = lambda e : e.key == pygame.K_q))
 
-    def selectBackground(self):
-        pass
     def play(self):
         Camera.readFrame()
         if not Camera.ret:

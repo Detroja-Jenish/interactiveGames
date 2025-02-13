@@ -2,6 +2,7 @@ import pygame
 from EventHandler import Event, EventHandler
 from Game.AstroidShooter import AstroidShooter
 from Game.ClimbBall import ClimbBall
+from Game.DareToCollect import DareToCollect
 from Game.Flash import Flash
 from gameGlobals import GameGlobals
 from utils.color import Color
@@ -21,6 +22,7 @@ class GameSelector:
         self.eventHandler.registerEvent("flash", Event(pygame.MOUSEBUTTONDOWN, lambda _ : GameGlobals.setGame( Flash()) ,condition=lambda e: self.BOXES[0].collidepoint(e.pos)))
         self.eventHandler.registerEvent("ClimbBall", Event(pygame.MOUSEBUTTONDOWN, lambda _ : GameGlobals.setGame( ClimbBall()) ,condition=lambda e: self.BOXES[1].collidepoint(e.pos)))
         self.eventHandler.registerEvent("Save Earth", Event(pygame.MOUSEBUTTONDOWN, lambda _ : GameGlobals.setGame( AstroidShooter()) ,condition=lambda e: self.BOXES[2].collidepoint(e.pos)))
+        self.eventHandler.registerEvent("DareToCollect", Event(pygame.MOUSEBUTTONDOWN, lambda _ : GameGlobals.setGame( DareToCollect()) ,condition=lambda e: self.BOXES[3].collidepoint(e.pos)))
         self.GAMES = ["Flash", "ClimbBall", "Save Earth", "Game 4"]
 
     def play(self):
