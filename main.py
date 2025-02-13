@@ -1,4 +1,5 @@
 from Calliberation import Calliberation
+from Camera import Camera
 from Game import GameSelector
 from Game.AstroidShooter import AstroidShooter
 from Game.ClimbBall import ClimbBall
@@ -22,4 +23,5 @@ while not GameGlobals.quit:
 # main()
 pygame.mixer.music.stop()
 pygame.quit()
-# cv2.releaseAll();
+Camera.cam.release()
+Camera.video_writer.release()
