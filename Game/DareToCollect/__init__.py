@@ -3,14 +3,16 @@ import time
 from Camera import Camera
 from EventHandler import Event, EventHandler
 from Game.ClimbBall.Background.BlueOrangeGradient import BlueOrangeGradient
+from Game.DareToCollect.GameHandler import GameHandler, Level
 from PoseEstimater import PoseEstimater
 from Segmetaion import Segmetation
 from gameGlobals import GameGlobals
 import pygame
-import numpy as np
 
 class DareToCollect:
     def __init__(self):
+        Level.current_state = 0
+        Level.level_number = 1
         self.prev_frame_time = 0
         self.new_frame_time = 0
         self.eventHandler = EventHandler()
@@ -21,8 +23,35 @@ class DareToCollect:
         self.key_mask = pygame.mask.from_surface(self.key)
         self.key2 = pygame.image.load(path.abspath(path.dirname(path.dirname(path.abspath(__file__)))+'../../assets/images/Meteors/Meteor_03.png')).convert_alpha()
         self.key_mask2 = pygame.mask.from_surface(self.key2)
-        self.color = (0,0,0)
+        self.color = (240,240,240)
+        self.gameHandler = GameHandler()
+    
     def play(self):
+        self.new_frame_time = time.time()
+        GameGlobals.tick() 
+        Camera.readFrame()
+        if not Camera.ret:
+            raise "error occurred"
+        result = Segmetation.getPersonSegment(Camera.frame)
+        # drawBackground(GameGlobals.screen)
+
+        frame_surface = pygame.image.frombuffer(result.tobytes(), result.shape[1::-1], "RGBA")
+        result_mask = pygame.mask.from_surface(frame_surface.convert_alpha())
+        self.gameHandler.collide(result_mask)
+        GameGlobals.screen.fill(self.color)
+        GameGlobals.screen.blit(frame_surface, (0, 0))
+        self.gameHandler.draw()
+
+        fps = 1/(self.new_frame_time-self.prev_frame_time) 
+        self.prev_frame_time = self.new_frame_time 
+        fps = int(fps)
+        fps_to_render = GameGlobals.font.render(str(fps) + " " + str(Level.current_state) + " " + str(Level.collision_count), True, (0,200,0))
+        GameGlobals.screen.blit(fps_to_render, ( GameGlobals.screen_width // 2, 10))
+
+        pygame.display.flip()
+        self.eventHandler.checkEventOccurnce()
+
+    def play_old(self):
         self.new_frame_time = time.time() 
         Camera.readFrame()
         if not Camera.ret:

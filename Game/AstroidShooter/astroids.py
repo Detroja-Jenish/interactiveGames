@@ -1,18 +1,19 @@
 import math
-import sys
 from gameGlobals import GameGlobals
 import random
 import pygame
 import time
 from threading import Thread
-from os import path
-images =[ pygame.image.load(path.abspath(path.dirname(path.dirname(path.abspath(__file__)))+'../../assets/images/Meteors/Meteor_01.png')),
-        pygame.image.load(path.abspath(path.dirname(path.dirname(path.abspath(__file__)))+'../../assets/images/Meteors/Meteor_03.png')),
-        pygame.image.load(path.abspath(path.dirname(path.dirname(path.abspath(__file__)))+'../../assets/images/Meteors/Meteor_05.png')),
-        pygame.image.load(path.abspath(path.dirname(path.dirname(path.abspath(__file__)))+'../../assets/images/Meteors/Meteor_07.png')),
-        pygame.image.load(path.abspath(path.dirname(path.dirname(path.abspath(__file__)))+'../../assets/images/Meteors/Meteor_10.png'))
-        ]
-explosionSound = pygame.mixer.Sound(path.abspath(path.dirname(path.dirname(path.abspath(__file__))))+'/../assets/sounds/explosion.wav')
+from utils.getPersistentPath import getPersistentPath
+
+images =[ 
+    pygame.image.load(getPersistentPath("assets/images/Meteors/Meteor_01.png")),
+    pygame.image.load(getPersistentPath("assets/images/Meteors/Meteor_03.png")),
+    pygame.image.load(getPersistentPath("assets/images/Meteors/Meteor_05.png")),
+    pygame.image.load(getPersistentPath("assets/images/Meteors/Meteor_07.png")),
+    pygame.image.load(getPersistentPath("assets/images/Meteors/Meteor_10.png"))
+]
+explosionSound = pygame.mixer.Sound(getPersistentPath("assets/sounds/explosion.wav"))
 class __Astroid__:
     accelration = 1;
     def __init__(self, x, y, radius, color, speed_x, speed_y):

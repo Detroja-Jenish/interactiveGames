@@ -125,7 +125,7 @@ class PoseEstimater:
     @classmethod
     def detectPersons(cls,frame):
         persons = []
-        results = cls.model(frame)
+        results = cls.model(frame,verbose=False)
         for result in results:
             for keypoints in result.keypoints.xy.cpu().numpy():
                 persons.append(cls.getPersonsKeypoints(keypoints))

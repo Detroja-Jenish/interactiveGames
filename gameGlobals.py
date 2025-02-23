@@ -15,6 +15,7 @@ class GameGlobals:
     isCameraCallibered = False
     startToPlay = False
     clock = pygame.time.Clock()
+    dt = 0
     game = None
     config = {
     "calliberationCords": {
@@ -33,7 +34,7 @@ class GameGlobals:
     "astroidShooter": {}
 }
     try:
-        with open(getPersistentPath("config.json"),"r") as fp:
+        with open(getPersistentPath(".config.json"),"r") as fp:
             config = json.load(fp)
     except Exception as e:
         pass
@@ -51,4 +52,8 @@ class GameGlobals:
     @classmethod
     def setGame(cls,game):
         cls.game = game
+
+    @classmethod
+    def tick(cls):
+        cls.dt = cls.clock.tick(30)
 

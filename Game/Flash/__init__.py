@@ -22,7 +22,7 @@ class Flash:
         self.hexagonHandler = HexagonHandler()
     
     def play(self):
-        dt = GameGlobals.clock.tick(30)
+        GameGlobals.tick()
         Camera.readFrame()
         if not Camera.ret:
             raise "error occurred"
@@ -40,7 +40,7 @@ class Flash:
                 for paddle in result.getNotNoneValues(takeNose=False):
                     pygame.draw.circle(GameGlobals.screen, paddle.color, (paddle.center_x, paddle.center_y), paddle.radius, 0)
                     self.hexagonHandler.checkCollision(paddle)
-        self.hexagonHandler.draw(dt)
+        self.hexagonHandler.draw()
         self.hexagonHandler.cleanup()
         pygame.display.flip()
         self.eventHandler.checkEventOccurnce()

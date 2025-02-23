@@ -30,15 +30,15 @@ class Hexagon:
         if distance <= self.initial_radius + paddle_radius:
             self.needToDisapper = True
 
-    def update(self,dt):
-        self.animation_time += dt
+    def update(self):
+        self.animation_time += GameGlobals.dt
         progress = min(self.animation_time / self.total_animation_time, 1)
         self.current_radius = self.initial_radius * (1 + progress)
         self.opacity = int(255 * (1 - progress))
 
-    def draw(self,dt):
+    def draw(self):
         if self.needToDisapper:
-            self.update(dt)
+            self.update()
         color = (*WHITE, self.opacity)
         hex_points = []
         for i in range(6):
@@ -64,13 +64,13 @@ class HexagonHandler:
     def generate_hexagons(self,num_points):
         return [Hexagon((random.randint(50, GameGlobals.screen_width-50), random.randint(50, GameGlobals.screen_height-50)),self.hexagonRadius,i) for i in range(num_points)]
     
-    def draw(self,dt):
+    def draw(self):
         for i in range(len(self.hexagons) - 1):
             start = self.hexagons[i].center
             end = self.hexagons[i+1].center
             pygame.draw.line(GameGlobals.screen, YELLOW, start, end, 2)
         for hexagon in self.hexagons:
-            hexagon.draw(dt)
+            hexagon.draw()
         
 
     def checkCollision(self,paddle):

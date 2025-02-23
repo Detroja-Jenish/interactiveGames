@@ -10,7 +10,7 @@ class Camera:
     ret, frame = cam.read()
     height, width = GameGlobals.screen_height,GameGlobals.screen_width 
     x,y,w,h = 0,0,0,0
-    video_writer = cv2.VideoWriter(getPersistentPath(f"videos/output/{datetime.now().strftime('%Y-%m-%d-%H:%M:%S')}.mp4"),cv2.VideoWriter_fourcc(*'mp4v') ,30,(GameGlobals.screen_width ,GameGlobals.screen_height))
+    video_writer = cv2.VideoWriter(getPersistentPath(f".videos/output/{datetime.now().strftime('%Y-%m-%d-%H:%M:%S')}.mp4"),cv2.VideoWriter_fourcc(*'mp4v') ,30,(GameGlobals.screen_width ,GameGlobals.screen_height))
     @classmethod
     def readFrame(cls):
         cls.ret, cls.frame = Camera.cam.read()
