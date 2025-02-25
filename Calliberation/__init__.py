@@ -68,7 +68,7 @@ class Calliberation:
         )
     
     def saveCalliberationData(self):
-        configFilePath = getPersistentPath("config.json")
+        configFilePath = getPersistentPath(".config.json")
         print(configFilePath)
         with open(configFilePath,"w") as fp:
             #print("from setCrop -> config.json -> write mode")

@@ -3,39 +3,6 @@ import pygame
 
 from gameGlobals import GameGlobals
 from utils.getPersistentPath import getPersistentPath
-
-
-def notToDo(pt1,pt2):
-    pass
-def fun1(pt1,pt2):
-    pt2.x += 1
-
-def fun2(pt1,pt2):
-    pt2.x += 1
-    pt1.x += 1
-
-def moveTo(pt1,pt2,args=[100,100,200,200]):
-    x1,y1,x2,y2 = args
-    if pt1.x != x1:
-        if pt1.x > x1 : pt1.x -= 1
-        else : pt1.x += 10
-    if pt1.y != y1:
-        if pt1.y > y1 : pt1.y -= 1
-        else : pt1.y += 10
-    if pt2.x != x2:
-        if pt2.x > x2 : pt2.x -= 1
-        else : pt2.x += 10
-    if pt2.y != y2:
-        if pt2.y > y2 : pt2.y -= 1
-        else : pt2.y += 10
-
-functions_register = {
-    "fun1":fun1,
-    "fun2":fun2,
-    "moveTo":moveTo,
-    "notToDo": notToDo
-}
-
 class Function:
     animation_time = 0
     def __init__(self):
@@ -47,22 +14,20 @@ class Function:
         }
 
     def update(self,function_name,pt1,pt2,args):
-        print("from function handler class")
-        if not args:self.functions_register[function_name](pt1,pt2)
-        else:self.functions_register[function_name](pt1,pt2,args)
+        self.functions_register[function_name](pt1,pt2,args)
         
-    def notToDo(self,pt1,pt2):
+    def notToDo(self,pt1,pt2,args):
         pass
-    def fun1(self,pt1,pt2):
+    def fun1(self,pt1,pt2,args):
         pt2.x += 1
 
-    def fun2(self,pt1,pt2):
+    def fun2(self,pt1,pt2,args):
         pt2.x += 1
         pt1.x += 1
 
-    def moveTo(self,pt1,pt2,args=[100,100,200,200,300]):
+    def moveTo(self,pt1,pt2,args):
         self.animation_time += GameGlobals.dt
-        x1,y1,x2,y2,total_animation_time = args
+        x1,y1,x2,y2,total_animation_time = args["x1"]*GameGlobals.screen_width,args["y1"]*GameGlobals.screen_height,args["x2"]*GameGlobals.screen_width,args["y2"]*GameGlobals.screen_height,args["total_animation_time"]
         progress = min(self.animation_time / total_animation_time, 1)
         print("progress", progress)
         pt1.x =  pt1.init_x + progress*(x1 - pt1.init_x)
@@ -87,24 +52,24 @@ class Point:
 class Spark:
     surface = pygame.Surface((GameGlobals.screen_width,GameGlobals.screen_height),pygame.SRCALPHA,32)
     surface = surface.convert_alpha()
-    def __init__(self,pt1,pt2,functions, args):
+    def __init__(self,pt1,pt2,functions):
         self.pt1 = pt1
         self.pt2 = pt2
-        self.functions = functions
+        self.function_names = list(functions.keys())
         self.destroy = False
-        self.args = args
+        self.args = list(functions.values())
         self.functionHandler = Function()
 
     def draw(self):
         pygame.draw.line(Spark.surface,(255,0,0),self.pt1.get_tupple(), self.pt2.get_tupple(),width=10)
 
     def update(self):
-        if Level.current_state >= len(self.functions) or self.functions[Level.current_state] == "destroy":
+        if Level.current_state >= len(self.function_names) or self.function_names[Level.current_state] == "destroy":
             self.destroy = True
             return
-        function_name = self.functions[Level.current_state]
+        function_name = self.function_names[Level.current_state]
         # print(function_name)
-        self.functionHandler.update(function_name,self.pt1,self.pt2,None if function_name not in self.args else self.args[function_name])
+        self.functionHandler.update(function_name,self.pt1,self.pt2,self.args[Level.current_state])
         # if function_name in self.args:
         #     print(self.args[function_name])
         #     functions_register[function_name](self.pt1,self.pt2,self.args[function_name])
@@ -112,7 +77,10 @@ class Spark:
     @classmethod
     def clearSurface(cls):
         cls.surface.fill((0,0,0,0))
-        # cls.surface = cls.surface.convert_alpha()
+
+    @classmethod
+    def drawSurface(cls):
+        GameGlobals.screen.blit(cls.surface,(0,0))
     
     @classmethod
     def collide(cls,user_mask):
@@ -142,29 +110,29 @@ class GameHandler:
             level_config = json.load(fp=fp)
         self.sparks = [
             Spark(
-                Point(i["init"]["x1"],i["init"]["y1"]), 
-                Point(i["init"]["x2"],i["init"]["y2"]), 
-                i["functions"],
-                i["args"]
+                Point(i["init"]["x1"]*GameGlobals.screen_width,i["init"]["y1"]*GameGlobals.screen_height), 
+                Point(i["init"]["x2"]*GameGlobals.screen_width,i["init"]["y2"]*GameGlobals.screen_height), 
+                i["functions"]
             ) for i in level_config[str(self.current_level)]["sparks"]
         ]
         self.keys = [
             Key(
-                Point(i[0],i[1])
+                Point(
+                    i[0]*GameGlobals.screen_width,
+                    i[1]*GameGlobals.screen_height
+                    )
             )for i in level_config[str(self.current_level)]["keys"]
         ]
 
     def draw(self):
         for key in self.keys:
             key.draw()
+
         Spark.clearSurface()
-        # Spark.surface.fill((0,0,0))
-        # Spark.surface.convert_alpha()
-        # pygame.transform.threshold(Spark.surface,Spark.surface,search_color=(0,0,0),set_color=(0,0,0,0))
         for spark in self.sparks:
             spark.update()
             spark.draw()
-        GameGlobals.screen.blit(Spark.surface,(0,0))
+        Spark.drawSurface()
     
     def collide(self,user_mask):
         Spark.collide(user_mask)
